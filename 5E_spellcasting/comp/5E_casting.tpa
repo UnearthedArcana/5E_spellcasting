@@ -1,0 +1,237 @@
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+//
+//								5E-STYLE SPELLCASTING
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+
+
+//set Vancian casters to new style__________________________________________________
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+// wizards
+
+DEFINE_ACTION_FUNCTION 5E_casting_wizards BEGIN
+
+ACTION_FOR_EACH kitclab IN ~CLABMA01~ ~CLABMA02~ ~CLABMA03~ ~CLABMA04~ ~CLABMA05~ ~CLABMA06~ ~CLABMA07~ ~CLABMA08~ ~CLABMA09~ BEGIN 
+  ACTION_IF (NOT FILE_EXISTS_IN_GAME ~%kitclab%.2da~) THEN BEGIN
+    COPY ~%MOD_FOLDER%/lib/semi_spont/BLANKCLAB.2da~ ~override/%kitclab%.2da~ //generate undefined clab files
+  END 
+END  
+
+
+// set up casting slots op233 spell
+COPY ~5E_spellcasting/data/5E_casting/castwiz.2da~ ~override~
+  LPF arcane_casting_slots STR_VAR table_spl = ~d5zltwz~ END
+BUT_ONLY
+
+// add table spell to every column of the relevant clab file
+APPEND ~clabma01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+LESSPREP    AP_D5Z0SLT  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ ~ UNLESS ~AP_D5ZZ000~
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
+  FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
+    PATCH_IF (class_num = 1) OR (class_num = 7) OR (class_num = 10) OR (class_num = 13) OR (class_num = 14) OR (class_num = 17) BEGIN
+      INNER_ACTION BEGIN
+APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ ~ UNLESS ~AP_D5ZZ000~
+      END
+    END
+  END
+BUT_ONLY
+
+END	//	end function
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+// bards
+
+DEFINE_ACTION_FUNCTION 5E_casting_bards BEGIN
+
+// set up casting slots op233 spell
+COPY ~5E_spellcasting/data/5E_casting/castbrd.2da~ ~override~
+  LPF arcane_casting_slots STR_VAR table_spl = ~d5zltbd~ END
+BUT_ONLY
+
+// add table spell to every column of the relevant clab file
+APPEND ~clabba01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD ~ UNLESS ~AP_D5ZZ000~
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
+  FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
+    PATCH_IF (class_num = 5) BEGIN
+      INNER_ACTION BEGIN
+APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD ~ UNLESS ~AP_D5ZZ000~
+      END
+    END
+  END
+BUT_ONLY
+
+END	//	end function
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+// clerics
+
+DEFINE_ACTION_FUNCTION 5E_casting_clerics BEGIN
+
+// set up casting slots op233 spell
+COPY ~5E_spellcasting/data/5E_casting/castprs.2da~ ~override~
+  LPF divine_casting_slots STR_VAR table_spl = ~d5zltcl~ END
+BUT_ONLY
+
+// add table spell to every column of the relevant clab file
+APPEND ~clabpr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL ~ UNLESS ~AP_D5ZZ000~
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
+  FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
+    PATCH_IF (class_num = 3) OR (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18) BEGIN
+      INNER_ACTION BEGIN
+APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL ~ UNLESS ~AP_D5ZZ000~
+      END
+    END
+  END
+BUT_ONLY
+
+END	//	end function
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+// druids
+
+DEFINE_ACTION_FUNCTION 5E_casting_druids BEGIN
+
+// set up casting slots op233 spell
+COPY ~5E_spellcasting/data/5E_casting/castdru.2da~ ~override~
+  LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
+BUT_ONLY
+
+// add table spell to every column of the relevant clab file
+APPEND ~clabdr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR ~ UNLESS ~AP_D5ZZ000~
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
+  FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
+    PATCH_IF (class_num = 11) OR (class_num = 16) BEGIN
+      INNER_ACTION BEGIN
+APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR ~ UNLESS ~AP_D5ZZ000~
+      END
+    END
+  END
+BUT_ONLY
+
+END	//	end function
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+// paladins
+
+DEFINE_ACTION_FUNCTION 5E_casting_paladins BEGIN
+
+// set up casting slots op233 spell
+COPY ~5E_spellcasting/data/5E_casting/castpal.2da~ ~override~			// ***** need to create this
+  LPF divine_casting_slots STR_VAR table_spl = ~d5zltpa~ END
+BUT_ONLY
+
+// add table spell to every column of the relevant clab file
+APPEND ~clabpa01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA ~ UNLESS ~AP_D5ZZ000~
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
+  FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
+    PATCH_IF (class_num = 6) BEGIN
+      INNER_ACTION BEGIN
+APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA ~ UNLESS ~AP_D5ZZ000~
+      END
+    END
+  END
+BUT_ONLY
+
+END	//	end function
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+// rangers
+
+DEFINE_ACTION_FUNCTION 5E_casting_rangers BEGIN
+
+// set up casting slots op233 spell
+COPY ~5E_spellcasting/data/5E_casting/castran.2da~ ~override~			// ***** need to create this
+  LPF divine_casting_slots STR_VAR table_spl = ~d5zltrn~ END
+BUT_ONLY
+
+// add table spell to every column of the relevant clab file
+APPEND ~clabrn01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN ~ UNLESS ~AP_D5ZZ000~
+
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_COLS cols
+  READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
+  FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
+    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
+    PATCH_IF (class_num = 12) BEGIN
+      INNER_ACTION BEGIN
+APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+REFRESH     ****        AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ  AP_D5ZSPLZ 
+CST_SLTS    AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN ~ UNLESS ~AP_D5ZZ000~
+      END
+    END
+  END
+BUT_ONLY
+
+
+END	//	end function

@@ -1,0 +1,134 @@
+BACKUP ~5E_spellcasting/backup~
+AUTHOR ~SubtleD~
+
+VERSION ~0.1~
+
+ALWAYS
+
+  INCLUDE ~5E_spellcasting/lib/semi_spontaneous.tpa~
+
+  INCLUDE ~5E_spellcasting/comp/5E_casting.tpa~
+
+  INCLUDE ~5E_spellcasting/lib/semi_spont/misc_functions.tpa~
+
+END
+
+ASK_EVERY_COMPONENT
+
+LANGUAGE
+  ~English~
+  ~english~
+  ~5E_spellcasting/lang/english/setup.tra~
+
+
+//set all Vancian casters to use 5E system____________________________________________
+//
+BEGIN @100
+DESIGNATED 100
+
+LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+
+LAF 5E_casting_wizards END
+LAF 5E_casting_bards END
+LAF 5E_casting_clerics END
+LAF 5E_casting_druids END
+LAF 5E_casting_paladins END
+LAF 5E_casting_rangers END
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+/*
+
+//set wizards to use 5E system________________________________________________________
+//
+BEGIN @200
+DESIGNATED 200
+FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
+  LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+END
+
+LAF 5E_casting_wizards END
+
+
+//set bards to use 5E system__________________________________________________________
+//
+BEGIN @300
+DESIGNATED 300
+FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
+  LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+END
+
+LAF 5E_casting_bards END
+
+
+//set clerics to use 5E system________________________________________________________
+//
+BEGIN @400
+DESIGNATED 400
+FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
+  LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+END
+
+LAF 5E_casting_clerics END
+
+
+//set druids to use 5E system_________________________________________________________
+//
+BEGIN @500
+DESIGNATED 500
+FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
+  LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+END
+
+LAF 5E_casting_druids END
+
+
+//set paladins to use 5E system_______________________________________________________
+//
+BEGIN @600
+DESIGNATED 600
+FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
+  LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+END
+
+LAF 5E_casting_paladins END
+
+
+//set rangers to use 5E system________________________________________________________
+//
+BEGIN @700
+DESIGNATED 700
+FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
+  LAF semi_spontaneous_everyone INT_VAR include_arcane = 1 include_divine = 1 END
+END
+
+LAF 5E_casting_rangers END
+
+*/
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+/*
+//bonus casting slot items apply to 5E casters________________________________________
+//
+BEGIN @900
+DESIGNATED 900
+
+LAF arcane_spont_items END
+LAF divine_spont_items END
+*/
