@@ -39,14 +39,17 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
   FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+	READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
-    PATCH_IF (class_num = 1) OR (class_num = 7) OR (class_num = 10) OR (class_num = 13) OR (class_num = 14) OR (class_num = 17) BEGIN
+    PATCH_IF (class_num = 1) /*OR (class_num = 7) OR (class_num = 10) OR (class_num = 13) OR (class_num = 14) OR (class_num = 17)*/ BEGIN	//	no need for  multiclass because in clabma01...?
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
 APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 CST_SLTS    AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ ~ UNLESS ~AP_D5ZZ000~
       END
+     END
     END
   END
 BUT_ONLY
@@ -91,14 +94,17 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
   FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+	READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     PATCH_IF (class_num = 5) BEGIN
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
 APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 CST_SLTS    AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD ~ UNLESS ~AP_D5ZZ000~
       END
+     END
     END
   END
 BUT_ONLY
@@ -141,13 +147,16 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
   FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+	READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
-    PATCH_IF (class_num = 3) OR (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18) BEGIN
+    PATCH_IF (class_num = 3) /*OR (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18)*/ BEGIN
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
 APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 CST_SLTS    AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL ~ UNLESS ~AP_D5ZZ000~
       END
+     END
     END
   END
 BUT_ONLY
@@ -175,13 +184,16 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
   FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+	READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     PATCH_IF (class_num = 11) OR (class_num = 16) BEGIN
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
 APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 CST_SLTS    AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR ~ UNLESS ~AP_D5ZZ000~
       END
+     END
     END
   END
 BUT_ONLY
@@ -209,13 +221,16 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
   FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+	READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     PATCH_IF (class_num = 6) BEGIN
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
 APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 CST_SLTS    AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA ~ UNLESS ~AP_D5ZZ000~
       END
+     END
     END
   END
 BUT_ONLY
@@ -244,13 +259,16 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
   READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 9
   FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
+	READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 class_ab
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     PATCH_IF (class_num = 12) BEGIN
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
 APPEND ~%class_ab%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 CST_SLTS    AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN ~ UNLESS ~AP_D5ZZ000~
       END
+     END
     END
   END
 BUT_ONLY
