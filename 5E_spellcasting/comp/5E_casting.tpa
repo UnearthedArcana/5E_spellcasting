@@ -47,18 +47,6 @@ END	//	end function
 
 DEFINE_ACTION_FUNCTION 5E_casting_wizards BEGIN
 
-APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
-	    SET kit_is_row = %row%
-	  END
-	END
-BUT_ONLY
-
 ACTION_FOR_EACH kitclab IN ~CLABMA01~ ~CLABMA02~ ~CLABMA03~ ~CLABMA04~ ~CLABMA05~ ~CLABMA06~ ~CLABMA07~ ~CLABMA08~ ~CLABMA09~ BEGIN 
   ACTION_IF (NOT FILE_EXISTS_IN_GAME ~%kitclab%.2da~) THEN BEGIN
     COPY ~%MOD_FOLDER%/lib/semi_spont/BLANKCLAB.2da~ ~override/%kitclab%.2da~ // generate undefined clab files
@@ -79,8 +67,7 @@ END
 APPEND ~clabma01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 LESSPREP    AP_D5Z0SLT  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ 
-COPY_EXISTING ~d5zlttc.spl~ ~override~
+COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 1 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltwz~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 7 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltwz~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 10 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltwz~ END
@@ -101,9 +88,6 @@ COPY_EXISTING ~kitlist.2da~ ~override~
       INNER_ACTION BEGIN
         APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ  AP_D5ZLTWZ 
-        COPY_EXISTING ~d5zprpd.spl~ ~override~
-          LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltwz~ END
       END
      END
     END
@@ -196,34 +180,6 @@ ACTION_FOR_EACH school IN ~abj~ ~con~ ~div~ ~enc~ ~ill~ ~evo~ ~nec~ ~alt~ ~gen~ 
     END
 END  
 
-/*
-APPEND ~splprot.2da~ ~D5_KIT_NOT%TAB%152%TAB%-1%TAB%5~ UNLESS ~D5_KIT_NOT~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_NOT~ BEGIN
-	    SET kit_not_row = %row%
-	  END
-	END
-BUT_ONLY
-
-COPY_EXISTING ~d5zswil.spl~ ~override~
-    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = 0x80000000 parameter2 = %kit_not_row% STR_VAR resource = ~d5zswil~ END
-IF_EXISTS BUT_ONLY
-
-APPEND ~clabma02.2da~ ~SCHL_SPLS   AP_D5ZSABJ  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma03.2da~ ~SCHL_SPLS   AP_D5ZSNEC  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma04.2da~ ~SCHL_SPLS   AP_D5ZSALT  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma05.2da~ ~SCHL_SPLS   AP_D5ZSDIV  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma06.2da~ ~SCHL_SPLS   AP_D5ZSCON  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma07.2da~ ~SCHL_SPLS   AP_D5ZSEVO  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma08.2da~ ~SCHL_SPLS   AP_D5ZSILL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma09.2da~ ~SCHL_SPLS   AP_D5ZSENC  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-APPEND ~clabma01.2da~ ~SCHL_SPLS   AP_D5ZSWIL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-*/
-
 APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
 COPY_EXISTING ~splprot.2da~ ~override~
 	COUNT_2DA_COLS cols
@@ -289,6 +245,7 @@ END
 
 END	//	end function
 
+//____________________________________________________________________________________
 
 DEFINE_ACTION_FUNCTION 5E_revised_simulacrum BEGIN
 
@@ -388,18 +345,6 @@ END	//	end function
 
 DEFINE_ACTION_FUNCTION 5E_casting_bards BEGIN
 
-APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
-	    SET kit_is_row = %row%
-	  END
-	END
-BUT_ONLY
-
 // set up casting slots op233 spell
 COPY ~5E_spellcasting/data/5E_casting/d5cstbrd.2da~ ~override~
   LPF arcane_casting_slots STR_VAR table_spl = ~d5zltbd~ END
@@ -413,8 +358,7 @@ END
 // add table spell to every column of the relevant clab file
 APPEND ~clabba01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD 
-COPY_EXISTING ~d5zlttc.spl~ ~override~
+COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 5 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltbd~ END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
@@ -430,9 +374,6 @@ COPY_EXISTING ~kitlist.2da~ ~override~
       INNER_ACTION BEGIN
         APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD  AP_D5ZLTBD 
-        COPY_EXISTING ~d5zprpd.spl~ ~override~
-          LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltbd~ END
       END
      END
     END
@@ -464,18 +405,6 @@ END	//	end function
 
 DEFINE_ACTION_FUNCTION 5E_casting_clerics BEGIN
 
-APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
-	    SET kit_is_row = %row%
-	  END
-	END
-BUT_ONLY
-
 // set up casting slots op233 spell
 COPY ~5E_spellcasting/data/5E_casting/d5cstprs.2da~ ~override~
   LPF divine_casting_slots STR_VAR table_spl = ~d5zltcl~ END
@@ -488,12 +417,11 @@ END
 
 // add table spell to every column of the relevant clab file
 APPEND ~clabpr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL 
 COPY_EXISTING ~clabpr01.2da~ ~override~
   REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
 BUT_ONLY
 
-COPY_EXISTING ~d5zlttc.spl~ ~override~
+COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 3 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltcl~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 8 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltcl~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 14 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltcl~ END
@@ -513,11 +441,8 @@ COPY_EXISTING ~kitlist.2da~ ~override~
       PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
         INNER_ACTION BEGIN
 		  APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL  AP_D5ZLTCL 
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
 		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
-          COPY_EXISTING ~d5zprpd.spl~ ~override~
-            LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltcl~ END
 		  BUT_ONLY
         END
       END
@@ -564,171 +489,6 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
 	END
   BUT_ONLY
 
-/*
-// ...btw FnP_Multi is going to need to replicate this
-  COPY_EXISTING ~kitlist.2da~ ~override~
-    COUNT_2DA_COLS cols
-    READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 10
-    FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
- 	  READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
-      READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 kit_table
-      READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
-    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
-      PATCH_IF (class_num = 3) OR (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18) BEGIN
-        INNER_ACTION BEGIN
-		  COPY_EXISTING ~d5_spher.2da~ ~override~
-			COUNT_2DA_COLS cols
-			COUNT_2DA_ROWS cols rows
-			FOR (row = 0; row < rows; row += 1) BEGIN
-			  READ_2DA_ENTRY row 0 cols sph_kit
-			  PATCH_IF (~%sph_kit%~ STRING_EQUAL_CASE ~%kit_table%~) BEGIN
-		        READ_2DA_ENTRY row 1 cols lif
-		        PATCH_IF (~%lif%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-		            COPY_EXISTING ~%kit_table%.2da~ ~override~
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFLIF  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 2 cols dea
-		        PATCH_IF (~%dea%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFDEA  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-		        END
-		        READ_2DA_ENTRY row 3 cols cre
-		        PATCH_IF (~%cre%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFCRE  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 4 cols des
-		        PATCH_IF (~%des%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFDES  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 5 cols pro
-		        PATCH_IF (~%pro%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFPRO  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 6 cols war
-		        PATCH_IF (~%war%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFWAR  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 7 cols exp
-		        PATCH_IF (~%exp%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFEXP  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 8 cols kno
-		        PATCH_IF (~%kno%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFKNO  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 9 cols dec
-		        PATCH_IF (~%dec%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFDEC  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 10 cols tho
-		        PATCH_IF (~%tho%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFTHO  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 11 cols dre
-		        PATCH_IF (~%dre%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFDRE  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 12 cols vig
-		        PATCH_IF (~%vig%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFVIG  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 13 cols aff
-		        PATCH_IF (~%aff%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFAFF  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 14 cols ani
-		        PATCH_IF (~%ani%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFANI  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 15 cols pla
-		        PATCH_IF (~%pla%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFPLA  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 16 cols ear
-		        PATCH_IF (~%ear%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFEAR  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 17 cols wat
-		        PATCH_IF (~%wat%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFWAT  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-	    	    END
-	    	    READ_2DA_ENTRY row 18 cols air
-	    	    PATCH_IF (~%air%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFAIR  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 19 cols fir
-		        PATCH_IF (~%fir%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFFIR  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-	    	    READ_2DA_ENTRY row 20 cols lig
-		        PATCH_IF (~%lig%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFLIG  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 21 cols sha
-		        PATCH_IF (~%sha%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFSHA  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 22 cols mag
-		        PATCH_IF (~%mag%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFMAG  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		        READ_2DA_ENTRY row 23 cols ast
-		        PATCH_IF (~%ast%~ STRING_EQUAL_CASE ~focus~) BEGIN
-		          INNER_ACTION BEGIN
-			        APPEND ~%kit_table%.2da~ ~FREE_SPLS   AP_D5ZFAST  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
-			      END
-		        END
-		      END
-		    END
-		  BUT_ONLY
-		END
-	  END
-	END
-  BUT_ONLY
-*/
-
 END
 
 END	//	end function
@@ -740,18 +500,6 @@ END	//	end function
 // druids
 
 DEFINE_ACTION_FUNCTION 5E_casting_druids BEGIN
-
-APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
-	    SET kit_is_row = %row%
-	  END
-	END
-BUT_ONLY
 
 // set up casting slots op233 spell
 COPY ~5E_spellcasting/data/5E_casting/d5cstdru.2da~ ~override~
@@ -765,8 +513,7 @@ END
 
 // add table spell to every column of the relevant clab file
 APPEND ~clabdr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR 
-COPY_EXISTING ~d5zlttc.spl~ ~override~
+COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 11 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltdr~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 16 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltdr~ END
 
@@ -782,9 +529,6 @@ COPY_EXISTING ~kitlist.2da~ ~override~
      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
         APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR  AP_D5ZLTDR 
-        COPY_EXISTING ~d5zprpd.spl~ ~override~
-          LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltdr~ END
       END
      END
     END
@@ -801,18 +545,6 @@ END	//	end function
 
 DEFINE_ACTION_FUNCTION 5E_casting_paladins BEGIN
 
-APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
-	    SET kit_is_row = %row%
-	  END
-	END
-BUT_ONLY
-
 // set up casting slots op233 spell
 COPY ~5E_spellcasting/data/5E_casting/d5cstpal.2da~ ~override~			// ***** need to create this
   LPF divine_casting_slots STR_VAR table_spl = ~d5zltpa~ END
@@ -825,8 +557,7 @@ END
 
 // add table spell to every column of the relevant clab file
 APPEND ~clabpa01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA 
-COPY_EXISTING ~d5zlttc.spl~ ~override~
+COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 11 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltpa~ END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
@@ -841,9 +572,6 @@ COPY_EXISTING ~kitlist.2da~ ~override~
      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
         APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA  AP_D5ZLTPA 
-        COPY_EXISTING ~d5zprpd.spl~ ~override~
-          LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltpa~ END
       END
      END
     END
@@ -856,21 +584,9 @@ END	//	end function
 //__________________________________________________________________________________
 //__________________________________________________________________________________
 
-// rangers
+// rangers 
 
 DEFINE_ACTION_FUNCTION 5E_casting_rangers BEGIN
-
-APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
-COPY_EXISTING ~splprot.2da~ ~override~
-	COUNT_2DA_COLS cols
-	READ_2DA_ENTRIES_NOW rows cols
-	FOR (row = 1; row < rows; ++row) BEGIN
-	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
-	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
-	    SET kit_is_row = %row%
-	  END
-	END
-BUT_ONLY
 
 // set up casting slots op233 spell
 COPY ~5E_spellcasting/data/5E_casting/d5cstran.2da~ ~override~			// ***** need to create this
@@ -884,8 +600,7 @@ END
 
 // add table spell to every column of the relevant clab file
 APPEND ~clabrn01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN 
-COPY_EXISTING ~d5zlttc.spl~ ~override~
+COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = 11 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltpa~ END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
@@ -900,9 +615,6 @@ COPY_EXISTING ~kitlist.2da~ ~override~
      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
       INNER_ACTION BEGIN
         APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-//CST_SLTS    AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN  AP_D5ZLTRN 
-        COPY_EXISTING ~d5zprpd.spl~ ~override~
-          LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltrn~ END
       END
      END
     END

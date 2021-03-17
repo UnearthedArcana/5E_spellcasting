@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~0.5~
+VERSION ~0.6~
 
 ALWAYS
 
@@ -38,8 +38,6 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND !(FILE_EXISTS_IN_GAM
   LAF semi_spontaneous_casting INT_VAR include_divine = 1 END
 END
 
-LAF 5E_casting_basics END
-
 LAF 5E_casting_wizards END
 ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
   LAF 5E_revised_simulacrum END
@@ -75,8 +73,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
 END
 
-LAF 5E_casting_basics END
-
 LAF 5E_casting_wizards END
 
 ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
@@ -97,8 +93,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
 END
 
-LAF 5E_casting_basics END
-
 LAF 5E_casting_bards END
 
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_arcane.d5~
@@ -114,8 +108,6 @@ FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
 ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
 END
-
-LAF 5E_casting_basics END
 
 LAF 5E_casting_clerics END
 
@@ -133,8 +125,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
 END
 
-LAF 5E_casting_basics END
-
 LAF 5E_casting_druids END
 
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
@@ -151,8 +141,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
 END
 
-LAF 5E_casting_basics END
-
 LAF 5E_casting_paladins END
 
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
@@ -168,8 +156,6 @@ FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
 ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
 END
-
-LAF 5E_casting_basics END
 
 LAF 5E_casting_rangers END
 
