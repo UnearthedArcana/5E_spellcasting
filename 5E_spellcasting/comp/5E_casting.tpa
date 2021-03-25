@@ -214,7 +214,7 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_mcsrc.qd~) BEGIN
 	READ_2DA_ENTRIES_NOW rows cols
 	FOR (row = 1; row < rows; ++row) BEGIN
 	  READ_2DA_ENTRY_FORMER rows row 0 ~code~
-	  READ_2DA_ENTRY_FORMER rows row 0 ~kit~
+	  READ_2DA_ENTRY_FORMER rows row 1 ~kit~
 	  PATCH_IF ~%kit%~ STRING_EQUAL_CASE ~D5_FIGHTER_SORCERER~ BEGIN
 	    SET fighter_sorcerer_code = %code%
 	  END
