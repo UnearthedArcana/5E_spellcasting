@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~0.7~
+VERSION ~0.8~
 
 ALWAYS
 
@@ -47,6 +47,8 @@ LAF 5E_casting_clerics END
 LAF 5E_casting_druids END
 LAF 5E_casting_paladins END
 LAF 5E_casting_rangers END
+
+// LAF 5E_casting_all_armor END
 
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_arcane.d5~
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_mages.d5~
