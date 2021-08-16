@@ -413,6 +413,35 @@ END	//	end function
 //__________________________________________________________________________________
 //__________________________________________________________________________________
 
+// fnp spheres
+
+DEFINE_ACTION_FUNCTION FnP_free_cast BEGIN
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5fnplst.2da~) BEGIN
+
+    COPY_EXISTING ~d5fnplst.2da~ ~override~
+      COUNT_2DA_COLS cols
+      READ_2DA_ENTRIES_NOW ~r2en_fnplst~ cols
+      FOR (row = 0; row < r2en_fnplst; ++row) BEGIN
+        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 0 real_spell
+        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 1 major_spell
+        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 3 focus_spell
+        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 5 system_sphere
+        SNPRINT 3 short_sphr ~%system_sphere%~
+        INNER_ACTION BEGIN
+          LAF free_cast_spells STR_VAR free_spell = EVAL ~%real_spell%~ list_spell = EVAL ~d5zf%short_sphr%~ END
+        END
+      END
+    BUT_ONLY
+
+END
+
+END	//	end function
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
 // clerics
 
 DEFINE_ACTION_FUNCTION 5E_casting_clerics BEGIN
@@ -451,52 +480,38 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
 		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
 		  BUT_ONLY
+		  ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+		    ACTION_FOR_EACH sphere IN ~LIF~ ~DEA~ ~CRE~ ~DES~ ~PRO~ ~WAR~ ~EXP~ ~KNO~ ~DEC~ ~THO~ ~DRE~ ~VIG~ ~AFF~ ~ANI~ ~PLA~ ~EAR~ ~WAT~ ~AIR~ ~FIR~ ~LIG~ ~SHA~ ~MAG~ ~AST~ BEGIN
+              ACTION_IF (FILE_CONTAINS_EVALUATED (~%kit_table%.2da~ ~AP_D5SF%sphere%~)) BEGIN
+		        COPY_EXISTING ~%kit_table%.2da~ ~override~
+		          PATCH_IF (FILE_EXISTS_IN_GAME ~d5zf%sphere%.spl~) BEGIN
+		            REPLACE_TEXTUALLY ~AP_D5SF%sphere%~ ~AP_D5ZF%sphere%~
+		          END
+		        BUT_ONLY
+			    ACTION_IF (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18) BEGIN
+			      ACTION_IF (FILE_EXISTS_IN_GAME ~QD_MCP01.SPL~) BEGIN
+				    ACTION_IF !(FILE_EXISTS_IN_GAME ~QD_MC_AP.eff~) BEGIN
+					  CREATE EFF ~QD_MC_AP~ 
+						WRITE_LONG   0x10 146 //cast spell
+						WRITE_LONG   0x14 2   //preset target 
+						WRITE_LONG   0x20 1   //cast instantly (ignore level) 
+						WRITE_SHORT  0x24 1   //permament until death
+						WRITE_SHORT  0x2c 100 //probability 100% 
+					END
+					COPY_EXISTING ~QD_MC_AP.eff~ ~override/d5zf%sphere%#.eff~
+					    WRITE_EVALUATED_ASCII 0x30 ~d5zf%sphere%~
+				  END
+				  COPY_EXISTING ~QD_MCP01.SPL~ ~override~
+				    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 177 target = 1 timing = 9 resist_dispel = 0 power = 0 parameter1 = %kit_ids% parameter2 = 9 STR_VAR resource = EVAL ~d5zf%sphere%#~ END  
+				END
+			  END
+			END
+		  END
         END
       END
     END
   END
 BUT_ONLY
-
-ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
-
-  COPY_EXISTING ~d5fnplst.2da~ ~override~
-    COUNT_2DA_COLS cols
-    READ_2DA_ENTRIES_NOW ~r2en_fnplst~ cols
-    FOR (row = 0; row < r2en_fnplst; ++row) BEGIN
-      READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 0 real_spell
-      READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 0 major_spell
-      READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 3 focus_spell
-      READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 5 system_sphere
-      SNPRINT 3 short_sphr ~%system_sphere%~
-      INNER_ACTION BEGIN
-        LAF free_cast_spells STR_VAR free_spell = EVAL ~%real_spell%~ list_spell = EVAL ~d5zf%short_sphr%~ END
-      END
-    END
-  BUT_ONLY
-
-  COPY_EXISTING ~kitlist.2da~ ~override~
-    COUNT_2DA_COLS cols
-    READ_2DA_ENTRIES_NOW ~r2en_kitlist~ 10
-    FOR (row = 2; row < r2en_kitlist; row += 1) BEGIN
- 	  READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 1 kit_name
-      READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 kit_table
-      READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
-    READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
-      PATCH_IF (class_num = 3) OR (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18) BEGIN
-        INNER_ACTION BEGIN
-		  COPY_EXISTING ~%kit_table%.2da~ ~override~
-		    PATCH_FOR_EACH sphere IN ~LIF~ ~DEA~ ~CRE~ ~DES~ ~PRO~ ~WAR~ ~EXP~ ~KNO~ ~DEC~ ~THO~ ~DRE~ ~VIG~ ~AFF~ ~ANI~ ~PLA~ ~EAR~ ~WAT~ ~AIR~ ~FIR~ ~LIG~ ~SHA~ ~MAG~ ~AST~ BEGIN
-		      PATCH_IF (FILE_EXISTS_IN_GAME ~d5zf%sphere%.spl~) BEGIN
-		        REPLACE_TEXTUALLY ~AP_D5SF%sphere%~ ~AP_D5ZF%sphere%~
-		      END
-		    END
-		  IF_EXISTS BUT_ONLY
-		END
-	  END
-	END
-  BUT_ONLY
-
-END
 
 END	//	end function
 
@@ -533,11 +548,41 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 11) OR (class_num = 16) BEGIN
-     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
-      INNER_ACTION BEGIN
-        APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
+        INNER_ACTION BEGIN
+          APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+		  COPY_EXISTING ~%kit_table%.2da~ ~override~
+		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+		  BUT_ONLY
+		  ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+		    ACTION_FOR_EACH sphere IN ~LIF~ ~DEA~ ~CRE~ ~DES~ ~PRO~ ~WAR~ ~EXP~ ~KNO~ ~DEC~ ~THO~ ~DRE~ ~VIG~ ~AFF~ ~ANI~ ~PLA~ ~EAR~ ~WAT~ ~AIR~ ~FIR~ ~LIG~ ~SHA~ ~MAG~ ~AST~ BEGIN
+              ACTION_IF (FILE_CONTAINS_EVALUATED (~%kit_table%.2da~ ~AP_D5SF%sphere%~)) BEGIN
+		        COPY_EXISTING ~%kit_table%.2da~ ~override~
+		          PATCH_IF (FILE_EXISTS_IN_GAME ~d5zf%sphere%.spl~) BEGIN
+		            REPLACE_TEXTUALLY ~AP_D5SF%sphere%~ ~AP_D5ZF%sphere%~
+		          END
+		        BUT_ONLY
+			    ACTION_IF (class_num = 16) BEGIN
+			      ACTION_IF (FILE_EXISTS_IN_GAME ~QD_MCD01.SPL~) BEGIN
+				    ACTION_IF !(FILE_EXISTS_IN_GAME ~QD_MC_AP.eff~) BEGIN
+					  CREATE EFF ~QD_MC_AP~ 
+						WRITE_LONG   0x10 146 //cast spell
+						WRITE_LONG   0x14 2   //preset target 
+						WRITE_LONG   0x20 1   //cast instantly (ignore level) 
+						WRITE_SHORT  0x24 1   //permament until death
+						WRITE_SHORT  0x2c 100 //probability 100% 
+					END
+					COPY_EXISTING ~QD_MC_AP.eff~ ~override/d5zf%sphere%#.eff~
+					    WRITE_EVALUATED_ASCII 0x30 ~d5zf%sphere%~
+				  END
+				  COPY_EXISTING ~QD_MCD01.SPL~ ~override~
+				    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 177 target = 1 timing = 9 resist_dispel = 0 power = 0 parameter1 = %kit_ids% parameter2 = 9 STR_VAR resource = EVAL ~d5zf%sphere%#~ END  
+				END
+			  END
+			END
+		  END
+        END
       END
-     END
     END
   END
 BUT_ONLY
@@ -576,11 +621,14 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 6) BEGIN
-     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
-      INNER_ACTION BEGIN
-        APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
+        INNER_ACTION BEGIN
+          APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+		  COPY_EXISTING ~%kit_table%.2da~ ~override~
+		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+		  BUT_ONLY
+        END
       END
-     END
     END
   END
 BUT_ONLY
@@ -619,11 +667,14 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 12) BEGIN
-     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
-      INNER_ACTION BEGIN
-        APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
+        INNER_ACTION BEGIN
+          APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+		  COPY_EXISTING ~%kit_table%.2da~ ~override~
+		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+		  BUT_ONLY
+        END
       END
-     END
     END
   END
 BUT_ONLY

@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~0.8~
+VERSION ~0.9~
 
 ALWAYS
 
@@ -43,10 +43,15 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
   LAF 5E_revised_simulacrum END
 END
 LAF 5E_casting_bards END
-LAF 5E_casting_clerics END
-LAF 5E_casting_druids END
-LAF 5E_casting_paladins END
-LAF 5E_casting_rangers END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+  LAF FnP_free_cast END
+END
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5yspld.spl~) BEGIN
+  LAF 5E_casting_clerics END
+  LAF 5E_casting_druids END
+  LAF 5E_casting_paladins END
+  LAF 5E_casting_rangers END
+END
 
 // LAF 5E_casting_all_armor END
 
