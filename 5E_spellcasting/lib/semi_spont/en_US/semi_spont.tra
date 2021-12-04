@@ -1,5 +1,5 @@
 //
-@10  = ~^Duration:.+$~
+@10  = ~^Duration:.+$~ // used for language auto-detection on non-EE games (or EE games where the user has not selected a language yet maybe?)
 //
 @99  = ~initialize innate spell learning~
 @100 = ~initialize 5E spellcasting~
