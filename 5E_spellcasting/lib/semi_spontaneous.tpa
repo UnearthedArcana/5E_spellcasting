@@ -84,7 +84,7 @@ ACTION_IF !(VARIABLE_IS_SET %EE_LANGUAGE%) BEGIN
   COPY_EXISTING ~spwi101.spl~ ~override~
 	READ_STRREF 0x50 description_string
   BUT_ONLY
-  ACTION_FOR_EACH lang IN ~en_US~ /*~fr_FR~ ~pl_PL~ ~de_DE~ ~es_ES~ ~cs_CZ~ ~ru_RU~ ~ko_KR~*/ BEGIN
+  ACTION_FOR_EACH lang IN ~en_US~ ~fr_FR~/* ~pl_PL~ ~de_DE~ ~es_ES~ ~cs_CZ~ ~ru_RU~ ~ko_KR~*/ BEGIN
 	WITH_TRA ~%MOD_FOLDER%/lib/semi_spont/%lang%/semi_spont.tra~ BEGIN
 	  OUTER_SPRINT duration_lang @10	//	USING_TRA ~low_magic/language/%lang%/descriptions.tra~
 	END	
@@ -742,7 +742,7 @@ END
 
 //prepare prepare spells spell________________________________________________________
 //
-OUTER_SET prep_message = RESOLVE_STR_REF(~Memorized spells may be now changed. Spellcasting is disabled until the next full rest.~)
+OUTER_SET prep_message = RESOLVE_STR_REF(@203)
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5zwtch.bam~ ~override~
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5zprep.bam~ ~override~
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5zgren.bam~ ~override~
