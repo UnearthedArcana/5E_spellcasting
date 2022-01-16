@@ -244,17 +244,23 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_mcsrc.qd~) BEGIN
 	  END
 	END  
   BUT_ONLY
-  ACTION_FOR_EACH 5e_spl IN ~d5zz000~ ~d5zzini~ /*~d5zlots~*/ ~d5zltwz~ BEGIN
+  ACTION_FOR_EACH 5e_spl IN ~d5zz000~ ~d5zzini~ /*~d5zlots~*/ ~d5zltwz~ ~d5zltwzz~ BEGIN
 	ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_spl%.spl~) BEGIN
       COPY_EXISTING ~%5e_spl%.spl~ ~override~ 
         PATCH_IF (VARIABLE_IS_SET %fighter_sorcerer_code%) BEGIN
 		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %fighter_sorcerer_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_spl%~ END
 		END
-        PATCH_IF (VARIABLE_IS_SET %sorcerer_cleric_code%) BEGIN
-		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %sorcerer_cleric_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_spl%~ END
-		END
         PATCH_IF (VARIABLE_IS_SET %sorcerer_thief_code%) BEGIN
 		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %sorcerer_thief_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_spl%~ END
+		END
+	  BUT_ONLY
+	END
+  END
+  ACTION_FOR_EACH 5e_mage_spl IN ~d5zz020~ ~d5z0slt~ ~d5zltwz~ ~d5zltwzz~ BEGIN
+	ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_mage_spl%.spl~) BEGIN
+      COPY_EXISTING ~%5e_mage_spl%.spl~ ~override~ 
+        PATCH_IF (VARIABLE_IS_SET %sorcerer_cleric_code%) BEGIN
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %sorcerer_cleric_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_mage_spl%~ END
 		END
 	  BUT_ONLY
 	END
@@ -419,24 +425,29 @@ END	//	end function
 
 DEFINE_ACTION_FUNCTION FnP_free_cast BEGIN
 
-ACTION_IF (FILE_EXISTS_IN_GAME ~d5fnplst.2da~) BEGIN
+  ACTION_IF (FILE_EXISTS_IN_GAME ~d5fnplst.2da~) BEGIN
 
     COPY_EXISTING ~d5fnplst.2da~ ~override~
       COUNT_2DA_COLS cols
-      READ_2DA_ENTRIES_NOW ~r2en_fnplst~ cols
-      FOR (row = 0; row < r2en_fnplst; ++row) BEGIN
-        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 0 real_spell
-        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 1 major_spell
-        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 3 focus_spell
-        READ_2DA_ENTRY_FORMER ~r2en_fnplst~ row 5 system_sphere
-        SNPRINT 3 short_sphr ~%system_sphere%~
-        INNER_ACTION BEGIN
-          LAF free_cast_spells STR_VAR free_spell = EVAL ~%real_spell%~ list_spell = EVAL ~d5zf%short_sphr%~ END
+      COUNT_2DA_ROWS cols rows
+      FOR (row = 0; row < rows; ++row) BEGIN
+        READ_2DA_ENTRY row 0 cols base_spl
+        READ_2DA_ENTRY row 1 cols fnp_spl
+        READ_2DA_ENTRY row 4 cols spher
+        READ_2DA_ENTRY row 5 cols system_spher
+        READ_2DA_ENTRY row 6 cols spt_ind
+        READ_2DA_ENTRY row 7 cols spt_proc
+        PATCH_IF (spt_ind > 100) AND (~%spt_proc%~ STRING_EQUAL_CASE ~no~) BEGIN
+          SNPRINT 3 short_spher ~%system_spher%~
+          INNER_ACTION BEGIN
+// free-to-cast spells
+            LAF free_cast_spells STR_VAR free_spell = EVAL ~%fnp_spl%~ list_spell = EVAL ~d5zf%short_spher%~ END
+          END
         END
       END
     BUT_ONLY
 
-END
+  END
 
 END	//	end function
 
