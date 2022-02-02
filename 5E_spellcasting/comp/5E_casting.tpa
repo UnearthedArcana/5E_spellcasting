@@ -100,7 +100,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 1) /*OR (class_num = 7) OR (class_num = 10) OR (class_num = 13) OR (class_num = 14) OR (class_num = 17)*/ BEGIN	//	no need for  multiclass because in clabma01...?
-     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
+     PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) AND !(~%kit_table%~ STRING_EQUAL_CASE ~D5_MANA~) BEGIN
       INNER_ACTION BEGIN
         APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
 NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
@@ -223,7 +223,7 @@ COPY_EXISTING ~d5zzini.spl~ ~override~
 
 // ***** need to change that ^^ to different spells if TnB revised specialists is installed
 
-//get kit identifiers_________________________________________________________________
+//exempt certain kits_________________________________________________________________
 //
 // add 318 effects to exempt multisorc from 5E casting
 ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_mcsrc.qd~) BEGIN
@@ -242,16 +242,34 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_mcsrc.qd~) BEGIN
 	  PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~D5_SORCERER_THIEF~) BEGIN
 	    SET sorcerer_thief_code = %code%
 	  END
+	  PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~D5_MANA_SORCERER~) BEGIN
+	    SET mana_sorcerer_code = %code%
+	  END
+	  PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~D5_PSION~) BEGIN
+	    SET psion_thief_code = %code%
+	  END
+	  PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~D5_SOULBLADE~) BEGIN
+	    SET psion_fighter_code = %code%
+	  END
+	  PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~D5_PSYPHER~) BEGIN
+	    SET psion_ranger_code = %code%
+	  END
+	  PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~D5_CEREBRO~) BEGIN
+	    SET psion_mage_code = %code%
+	  END
 	END  
   BUT_ONLY
-  ACTION_FOR_EACH 5e_spl IN ~d5zz000~ ~d5zzini~ /*~d5zlots~*/ ~d5zltwz~ ~d5zltwzz~ BEGIN
-	ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_spl%.spl~) BEGIN
-      COPY_EXISTING ~%5e_spl%.spl~ ~override~ 
+  ACTION_FOR_EACH 5e_mspl IN ~d5zz000~ ~d5zzini~ /*~d5zlots~*/ ~d5zltwz~ ~d5zltwzz~ BEGIN
+	ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_mspl%.spl~) BEGIN
+      COPY_EXISTING ~%5e_mspl%.spl~ ~override~ 
         PATCH_IF (VARIABLE_IS_SET %fighter_sorcerer_code%) BEGIN
-		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %fighter_sorcerer_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_spl%~ END
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %fighter_sorcerer_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_mspl%~ END
 		END
         PATCH_IF (VARIABLE_IS_SET %sorcerer_thief_code%) BEGIN
-		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %sorcerer_thief_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_spl%~ END
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %sorcerer_thief_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_mspl%~ END
+		END
+        PATCH_IF (VARIABLE_IS_SET %mana_sorcerer_code%) BEGIN
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %mana_sorcerer_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_mspl%~ END
 		END
 	  BUT_ONLY
 	END
@@ -264,6 +282,58 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_mcsrc.qd~) BEGIN
 		END
 	  BUT_ONLY
 	END
+  END
+  ACTION_FOR_EACH 5e_cspl IN ~d5zz000~ ~d5zzini~ /*~d5zlots~*/ ~d5zltcl~ ~d5zltclz~ BEGIN
+	ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_cspl%.spl~) BEGIN
+      COPY_EXISTING ~%5e_cspl%.spl~ ~override~ 
+        PATCH_IF (VARIABLE_IS_SET %psion_thief_code%) BEGIN
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %psion_thief_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_cspl%~ END
+		END
+        PATCH_IF (VARIABLE_IS_SET %psion_fighter_code%) BEGIN
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %psion_fighter_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_cspl%~ END
+		END
+        PATCH_IF (VARIABLE_IS_SET %psion_ranger_code%) BEGIN
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %psion_ranger_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_cspl%~ END
+		END
+	  BUT_ONLY
+	END
+  END
+  ACTION_FOR_EACH 5e_cleric_spl IN ~d5zz010~ ~d5z0slt~ ~d5zltcl~ ~d5zltclz~ BEGIN
+	ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_cleric_spl%.spl~) BEGIN
+      COPY_EXISTING ~%5e_cleric_spl%.spl~ ~override~ 
+        PATCH_IF (VARIABLE_IS_SET %psion_mage_code%) BEGIN
+		  LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %psion_mage_code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_cleric_spl%~ END
+		END
+	  BUT_ONLY
+	END
+  END
+END
+
+//handle TnB revised specialists______________________________________________________
+//
+COPY_EXISTING_REGEXP GLOB ~^.+\.2da$~ ~override~
+  REPLACE_TEXTUALLY ~GA_D5SPONT~ ~****      ~
+BUT_ONLY
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
+  READ_SHORT 0x1c spell_type
+  PATCH_IF (spell_type = 1) BEGIN
+    LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~d5spont~ END
+    LPF DELETE_EFFECT INT_VAR match_opcode = 172 STR_VAR match_resource = ~d5spont~ END
+    LPF DELETE_EFFECT INT_VAR match_opcode = 172 STR_VAR match_resource = ~d5spntx~ END
+    LPF DELETE_SPELL_HEADER INT_VAR min_level = 51 END
+  END
+BUT_ONLY
+
+ACTION_FOR_EACH tnb_spec_spl IN ~d5_conj1~ ~d5_conj2~ ~d5_conj3~ ~d5_conj4~ ~d5_conj5~ ~d5_conj6~ ~d5_conj7~  ~~ BEGIN
+  ACTION_IF (FILE_EXISTS_IN_GAME ~%tnb_spec_spl%.spl~) BEGIN
+    OUTER_SPRINT $tnb_spec_spells(~%tnb_spec_spl%~) ~1~
+  END
+END
+
+ACTION_IF FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~ BEGIN
+  ACTION_PHP_EACH tnb_spec_spells AS spec_spl => ind BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%spec_spl%~ cast_spell = EVAL ~%spec_spl%~ spell_type = ~arcane~ END
   END
 END
 
@@ -684,7 +754,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 12) BEGIN
-      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
+      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) AND !(~%kit_table%~ STRING_MATCHES_REGEXP ~D5PSI+~ = 0) BEGIN
         INNER_ACTION BEGIN
           APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
