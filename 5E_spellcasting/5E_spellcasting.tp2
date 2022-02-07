@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~1.4~
+VERSION ~1.5~
 
 ALWAYS
 
@@ -26,8 +26,15 @@ LANGUAGE
 BEGIN @100
 DESIGNATED 100
 
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5__fnp_spont_option.d5~) BEGIN
+  OUTER_SET 5e_divine = 0
+END
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__fnp_spont_option.d5~) BEGIN
+  OUTER_SET 5e_divine = 1
+END
+
 ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
+  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = %5e_divine% END
 END
 
 ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND (FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
@@ -35,7 +42,7 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND (FILE_EXISTS_IN_GAM
 END
 
 ACTION_IF (FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_divine = 1 END
+  LAF semi_spontaneous_casting INT_VAR include_divine = %5e_divine% END
 END
 
 LAF 5E_casting_wizards END
@@ -54,15 +61,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5yspld.spl~) BEGIN
 END
 
 // LAF 5E_casting_all_armor END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_arcane.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_mages.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_bards.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_clerics.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_druids.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_paladins.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_rangers.d5~
 
 
 //__________________________________________________________________________________
@@ -175,7 +173,7 @@ COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_rangers
 //__________________________________________________________________________________
 
 
-//bonus casting slot items apply to 5E casters________________________________________
+//bonus casting slot items apply to 5E casters_______________________________________
 //
 BEGIN @900
 DESIGNATED 900
@@ -191,7 +189,7 @@ LAF divine_spont_items END
 
 /* don't include this, just install it from SoB
 
-//bonus casting slot items apply to 5E casters________________________________________
+//bonus casting slots from stats for 5E casters______________________________________
 //
 BEGIN @950
 DESIGNATED 950

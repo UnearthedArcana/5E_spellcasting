@@ -337,6 +337,8 @@ ACTION_IF FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~ BEGIN
   END
 END
 
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_mages.d5~
+
 END	//	end function
 
 //____________________________________________________________________________________
@@ -485,6 +487,8 @@ ACTION_IF (MOD_IS_INSTALLED ~tomeandblood.tp2~ ~62~) BEGIN	//	L1 cantrips
   IF_EXISTS BUT_ONLY
 END
 
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_bards.d5~
+
 END	//	end function
 
 
@@ -597,6 +601,8 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   END
 BUT_ONLY
 
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_clerics.d5~
+
 END	//	end function
 
 
@@ -672,6 +678,8 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   END
 BUT_ONLY
 
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_druids.d5~
+
 END	//	end function
 
 
@@ -718,6 +726,8 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     END
   END
 BUT_ONLY
+
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_paladins.d5~
 
 END	//	end function
 
@@ -766,5 +776,6 @@ COPY_EXISTING ~kitlist.2da~ ~override~
   END
 BUT_ONLY
 
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_rangers.d5~
 
 END	//	end function
