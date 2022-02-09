@@ -534,7 +534,7 @@ END	//	end function
 DEFINE_ACTION_FUNCTION 5E_casting_clerics BEGIN
 
 // replace table for memorization slots
-COPY ~5E_spellcasting/data/mxsplprs.2da~ ~override~
+COPY ~5E_spellcasting/data/5E_casting/mxsplprs.2da~ ~override~
 
 // set up casting slots op233 spell
 COPY ~5E_spellcasting/data/5E_casting/d5cstprs.2da~ ~override~
