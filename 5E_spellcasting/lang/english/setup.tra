@@ -13,7 +13,9 @@
 @500 = ~Change Druids to 5E System~
 @600 = ~Change Paladins to 5E System~
 @700 = ~Change Rangers to 5E System~
-@900 = ~Set Bonus Spell Slot Items to Work for 5E Casters~
+@900 = ~Bonus Spell Slot Items and 5E Casters~
+@901 = ~bonuses to both memorization slots and casting slots~
+@902 = ~bonuses to casting slots only~
 @950 = ~Give 5E Casters Bonus Casting Slots for Ability Scores~
 
 @21989 = ~Extra eighth level spell slot~

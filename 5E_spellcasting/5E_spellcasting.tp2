@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~1.5.4~
+VERSION ~1.6~
 
 ALWAYS
 
@@ -33,15 +33,15 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__fnp_spont_option.d5~) BEGIN
   OUTER_SET 5e_divine = 1
 END
 
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = %5e_divine% END
 END
 
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND (FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) AND (FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_arcane = 1 END
 END
 
-ACTION_IF (FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
   LAF semi_spontaneous_casting INT_VAR include_divine = %5e_divine% END
 END
 
@@ -60,128 +60,34 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5yspld.spl~) BEGIN
   LAF 5E_casting_rangers END
 END
 
-// LAF 5E_casting_all_armor END
-
-
-//__________________________________________________________________________________
-//__________________________________________________________________________________
-
-/*
-
-//set wizards to use 5E system________________________________________________________
-//
-BEGIN @200
-DESIGNATED 200
-FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
-END
-
-LAF 5E_casting_wizards END
-
-ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
-  LAF 5E_revised_simulacrum END
-END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_arcane.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_mages.d5~
-
-
-//set bards to use 5E system__________________________________________________________
-//
-BEGIN @300
-DESIGNATED 300
-FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
-END
-
-LAF 5E_casting_bards END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_arcane.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_bards.d5~
-
-
-//set clerics to use 5E system________________________________________________________
-//
-BEGIN @400
-DESIGNATED 400
-FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
-END
-
-LAF 5E_casting_clerics END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_clerics.d5~
-
-
-//set druids to use 5E system_________________________________________________________
-//
-BEGIN @500
-DESIGNATED 500
-FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
-END
-
-LAF 5E_casting_druids END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_druids.d5~
-
-
-//set paladins to use 5E system_______________________________________________________
-//
-BEGIN @600
-DESIGNATED 600
-FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
-END
-
-LAF 5E_casting_paladins END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_paladins.d5~
-
-
-//set rangers to use 5E system________________________________________________________
-//
-BEGIN @700
-DESIGNATED 700
-FORBID_COMPONENT ~5E_spellcasting.tp2~ ~100~ @1
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_semi_spont.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = 1 END
-END
-
-LAF 5E_casting_rangers END
-
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_rangers.d5~
-
-*/
 
 //__________________________________________________________________________________
 //__________________________________________________________________________________
 
 
-//bonus casting slot items apply to 5E casters_______________________________________
+//bonus casting slots from items - with mem slots___________________________________
 //
-BEGIN @900
-DESIGNATED 900
+BEGIN @901
+DESIGNATED 901
+SUBCOMPONENT @900
 REQUIRE_PREDICATE (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) @1
 
-LAF arcane_spont_items END
-LAF divine_spont_items END
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__spont_items_mem.d5~
 
+LAF arcane_spont_items INT_VAR 5e_plus_mem = 1 END
+LAF divine_spont_items INT_VAR 5e_plus_mem = 1 END
+
+
+//bonus casting slots from items - no mem slots_____________________________________
+//
+BEGIN @902
+DESIGNATED 902
+SUBCOMPONENT @900
+
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__spont_items_no_mem.d5~
+
+LAF arcane_spont_items INT_VAR 5e_plus_mem = 0 END
+LAF divine_spont_items INT_VAR 5e_plus_mem = 0 END
 
 
 //__________________________________________________________________________________
