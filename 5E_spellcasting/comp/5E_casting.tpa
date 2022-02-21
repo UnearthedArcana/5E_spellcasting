@@ -763,7 +763,7 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
 	  END
     END
   BUT_ONLY
-  COPY_EXISTING ~mxsplpdru.2da~ ~override~
+  COPY_EXISTING ~mxspldru.2da~ ~override~
     COUNT_2DA_COLS cols
     PATCH_IF (cols > 1) BEGIN
       SET max_lvl_plus = cols
@@ -995,7 +995,7 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
 	  END
     END
   BUT_ONLY
-  COPY_EXISTING ~mxsplpran.2da~ ~override~
+  COPY_EXISTING ~mxsplran.2da~ ~override~
     COUNT_2DA_COLS cols
     PATCH_IF (cols > 1) BEGIN
       SET max_lvl_plus = cols
