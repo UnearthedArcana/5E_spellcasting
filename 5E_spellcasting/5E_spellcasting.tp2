@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~1.6~
+VERSION ~1.6.1~
 
 ALWAYS
 
@@ -70,13 +70,14 @@ END
 BEGIN @901
 DESIGNATED 901
 SUBCOMPONENT @900
-REQUIRE_PREDICATE (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) @1
+//REQUIRE_PREDICATE (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) @1
 
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__spont_items_mem.d5~
+ACTION_IF (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) BEGIN
+ COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__spont_items_mem.d5~
 
-LAF arcane_spont_items INT_VAR 5e_plus_mem = 1 END
-LAF divine_spont_items INT_VAR 5e_plus_mem = 1 END
-
+ LAF arcane_spont_items INT_VAR 5e_plus_mem = 1 END
+ LAF divine_spont_items INT_VAR 5e_plus_mem = 1 END
+END
 
 //bonus casting slots from items - no mem slots_____________________________________
 //
@@ -84,11 +85,12 @@ BEGIN @902
 DESIGNATED 902
 SUBCOMPONENT @900
 
-COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__spont_items_no_mem.d5~
+ACTION_IF (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) BEGIN
+ COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__spont_items_no_mem.d5~
 
-LAF arcane_spont_items INT_VAR 5e_plus_mem = 0 END
-LAF divine_spont_items INT_VAR 5e_plus_mem = 0 END
-
+ LAF arcane_spont_items INT_VAR 5e_plus_mem = 0 END
+ LAF divine_spont_items INT_VAR 5e_plus_mem = 0 END
+END
 
 //__________________________________________________________________________________
 //__________________________________________________________________________________

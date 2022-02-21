@@ -591,12 +591,6 @@ COPY ~5E_spellcasting/data/5E_casting/d5cstprs.2da~ ~override~
   LPF divine_casting_slots STR_VAR table_spl = ~d5zltcl~ END
 BUT_ONLY
 
-// add table spell to every column of the relevant clab file
-APPEND ~clabpr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
-COPY_EXISTING ~clabpr01.2da~ ~override~
-  REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
-BUT_ONLY
-
 COPY_EXISTING ~d5zprpd.spl~ ~override~
 			  ~d5zrfsh.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 3 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltclz~ END
@@ -605,6 +599,54 @@ COPY_EXISTING ~d5zprpd.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 15 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltclz~ END
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 17 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltclz~ END
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 18 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltclz~ END
+
+APPEND ~clabpr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+COPY_EXISTING ~clabpr01.2da~ ~override~
+  REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+BUT_ONLY
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+  COPY_EXISTING_REGEXP ~^[Ss][Pp][Pp][Rr][1-7]\([0-4][0-9]\|50\)\.spl$~ ~override~
+    PATCH_IF (%SOURCE_SIZE% > 0x71) BEGIN
+      PATCH_IF !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR721~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR722~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR723~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR724~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR725~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR726~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR727~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR728~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR729~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR730~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR731~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR732~) BEGIN
+	    PATCH_IF !(FILE_CONTAINS_EVALUATED (~hidespl.2da~ ~%SOURCE_RES%~)) BEGIN
+	      READ_SHORT 0x1c spelltype
+	      READ_LONG 0x1c spelllevel
+	      PATCH_IF (spelltype = 2) BEGIN
+	        READ_BYTE 0x21 exclude
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b10000000) BEGIN // valid for clerics
+	          SPRINT $cleric_only_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b00000000) BEGIN // valid for both
+	          SPRINT $cleric_druid_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	      END
+	    END
+	  END
+    END
+  BUT_ONLY
+  COPY_EXISTING ~mxsplprs.2da~ ~override~
+    COUNT_2DA_COLS cols
+    PATCH_IF (cols > 1) BEGIN
+      SET max_lvl_plus = cols
+    END
+  BUT_ONLY
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5gacls.spl~) BEGIN
+    COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5gacls.spl~
+      PHP_EACH cleric_only_spells AS cler_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%cler_spl%~ END
+        END
+      END
+      PHP_EACH cleric_druid_spells AS prs_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%prs_spl%~ END
+        END
+      END
+    BUT_ONLY
+  END
+  APPEND ~clabpr01.2da~ ~GET_SPELLS  AP_D5GACLS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
@@ -621,6 +663,9 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
 		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
 		  BUT_ONLY
+		  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+		    APPEND ~%kit_table%.2da~ ~GET_SPELLS  AP_D5GACLS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+		  END
 		  ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
 		    ACTION_FOR_EACH sphere IN ~LIF~ ~DEA~ ~CRE~ ~DES~ ~PRO~ ~WAR~ ~EXP~ ~KNO~ ~DEC~ ~THO~ ~DRE~ ~VIG~ ~AFF~ ~ANI~ ~PLA~ ~EAR~ ~WAT~ ~AIR~ ~FIR~ ~LIG~ ~SHA~ ~MAG~ ~AST~ BEGIN
               ACTION_IF (FILE_CONTAINS_EVALUATED (~%kit_table%.2da~ ~AP_D5SF%sphere%~)) BEGIN
@@ -663,6 +708,8 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spont_items_no_mem.d5~) AND !(FILE_EXISTS_IN
   LAF divine_spont_items INT_VAR 5e_plus_mem = 0 END
 END
 
+CLEAR_ARRAYS
+
 END	//	end function
 
 
@@ -686,12 +733,58 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltdr.spl~) BEGIN
     WRITE_SHORT 0x1c 2
 END
 
-// add table spell to every column of the relevant clab file
-APPEND ~clabdr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
 COPY_EXISTING ~d5zprpd.spl~ ~override~
 			  ~d5zrfsh.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 11 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltdrz~ END
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 16 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltdrz~ END
+
+APPEND ~clabdr01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+COPY_EXISTING ~clabdr01.2da~ ~override~
+  REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+BUT_ONLY
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+  COPY_EXISTING_REGEXP ~^[Ss][Pp][Pp][Rr][1-7]\([0-4][0-9]\|50\)\.spl$~ ~override~
+    PATCH_IF (%SOURCE_SIZE% > 0x71) BEGIN
+      PATCH_IF !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR721~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR722~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR723~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR724~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR725~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR726~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR727~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR728~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR729~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR730~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR731~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR732~) BEGIN
+	    PATCH_IF !(FILE_CONTAINS_EVALUATED (~hidespl.2da~ ~%SOURCE_RES%~)) BEGIN
+	      READ_SHORT 0x1c spelltype
+	      READ_LONG 0x1c spelllevel
+	      PATCH_IF (spelltype = 2) BEGIN
+	        READ_BYTE 0x21 exclude
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b01000000) BEGIN // valid for druids
+	          SPRINT $druid_only_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b00000000) BEGIN // valid for both
+	          SPRINT $cleric_druid_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	      END
+	    END
+	  END
+    END
+  BUT_ONLY
+  COPY_EXISTING ~mxsplpdru.2da~ ~override~
+    COUNT_2DA_COLS cols
+    PATCH_IF (cols > 1) BEGIN
+      SET max_lvl_plus = cols
+    END
+  BUT_ONLY
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5gadrs.spl~) BEGIN
+    COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5gadrs.spl~
+      PHP_EACH druid_only_spells AS dru_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%dru_spl%~ END
+        END
+      END
+      PHP_EACH cleric_druid_spells AS prs_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%prs_spl%~ END
+        END
+      END
+    BUT_ONLY
+  END
+  APPEND ~clabpr01.2da~ ~GET_SPELLS  AP_D5GADRS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
@@ -708,6 +801,9 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
 		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
 		  BUT_ONLY
+		  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+		    APPEND ~%kit_table%.2da~ ~GET_SPELLS  AP_D5GADRS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+		  END
 		  ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
 		    ACTION_FOR_EACH sphere IN ~LIF~ ~DEA~ ~CRE~ ~DES~ ~PRO~ ~WAR~ ~EXP~ ~KNO~ ~DEC~ ~THO~ ~DRE~ ~VIG~ ~AFF~ ~ANI~ ~PLA~ ~EAR~ ~WAT~ ~AIR~ ~FIR~ ~LIG~ ~SHA~ ~MAG~ ~AST~ BEGIN
               ACTION_IF (FILE_CONTAINS_EVALUATED (~%kit_table%.2da~ ~AP_D5SF%sphere%~)) BEGIN
@@ -770,11 +866,57 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltpa.spl~) BEGIN
     WRITE_SHORT 0x1c 2
 END
 
-// add table spell to every column of the relevant clab file
-APPEND ~clabpa01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
 COPY_EXISTING ~d5zprpd.spl~ ~override~
 			  ~d5zrfsh.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 6 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltpaz~ END
+
+APPEND ~clabpa01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+COPY_EXISTING ~clabpa01.2da~ ~override~
+  REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+BUT_ONLY
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+  COPY_EXISTING_REGEXP ~^[Ss][Pp][Pp][Rr][1-7]\([0-4][0-9]\|50\)\.spl$~ ~override~
+    PATCH_IF (%SOURCE_SIZE% > 0x71) BEGIN
+      PATCH_IF !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR721~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR722~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR723~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR724~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR725~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR726~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR727~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR728~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR729~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR730~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR731~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR732~) BEGIN
+	    PATCH_IF !(FILE_CONTAINS_EVALUATED (~hidespl.2da~ ~%SOURCE_RES%~)) BEGIN
+	      READ_SHORT 0x1c spelltype
+	      READ_LONG 0x1c spelllevel
+	      PATCH_IF (spelltype = 2) BEGIN
+	        READ_BYTE 0x21 exclude
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b10000000) BEGIN // valid for clerics
+	          SPRINT $cleric_only_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b00000000) BEGIN // valid for both
+	          SPRINT $cleric_druid_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	      END
+	    END
+	  END
+    END
+  BUT_ONLY
+  COPY_EXISTING ~mxsplpal.2da~ ~override~
+    COUNT_2DA_COLS cols
+    PATCH_IF (cols > 1) BEGIN
+      SET max_lvl_plus = cols
+    END
+  BUT_ONLY
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5gapas.spl~) BEGIN
+    COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5gapas.spl~
+      PHP_EACH cleric_only_spells AS cler_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%cler_spl%~ END
+        END
+      END
+      PHP_EACH cleric_druid_spells AS prs_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%prs_spl%~ END
+        END
+      END
+    BUT_ONLY
+  END
+  APPEND ~clabpa01.2da~ ~GET_SPELLS  AP_D5GAPAS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
@@ -791,6 +933,9 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
 		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
 		  BUT_ONLY
+		  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+		    APPEND ~%kit_table%.2da~ ~GET_SPELLS  AP_D5GAPAS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+		  END
         END
       END
     END
@@ -798,6 +943,8 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 BUT_ONLY
 
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_paladins.d5~
+
+CLEAR_ARRAYS
 
 END	//	end function
 
@@ -819,11 +966,57 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltrn.spl~) BEGIN
     WRITE_SHORT 0x1c 2
 END
 
-// add table spell to every column of the relevant clab file
-APPEND ~clabrn01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
 COPY_EXISTING ~d5zprpd.spl~ ~override~
 			  ~d5zrfsh.spl~ ~override~
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = 12 parameter2 = 105 timing = 1 STR_VAR resource = ~d5zltrnz~ END
+
+APPEND ~clabrn01.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
+COPY_EXISTING ~clabrn01.2da~ ~override~
+  REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
+BUT_ONLY
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+  COPY_EXISTING_REGEXP ~^[Ss][Pp][Pp][Rr][1-7]\([0-4][0-9]\|50\)\.spl$~ ~override~
+    PATCH_IF (%SOURCE_SIZE% > 0x71) BEGIN
+      PATCH_IF !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR721~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR722~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR723~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR724~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR725~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR726~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR727~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR728~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR729~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR730~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR731~) AND !(~%SOURCE_RES%~ STRING_EQUAL_CASE ~SPPR732~) BEGIN
+	    PATCH_IF !(FILE_CONTAINS_EVALUATED (~hidespl.2da~ ~%SOURCE_RES%~)) BEGIN
+	      READ_SHORT 0x1c spelltype
+	      READ_LONG 0x1c spelllevel
+	      PATCH_IF (spelltype = 2) BEGIN
+	        READ_BYTE 0x21 exclude
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b01000000) BEGIN // valid for druids
+	          SPRINT $druid_only_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	        PATCH_IF ((exclude BAND 0b11000000) = 0b00000000) BEGIN // valid for both
+	          SPRINT $cleric_druid_spells(~%SOURCE_RES%~)~%spelllevel%~
+	        END
+	      END
+	    END
+	  END
+    END
+  BUT_ONLY
+  COPY_EXISTING ~mxsplpran.2da~ ~override~
+    COUNT_2DA_COLS cols
+    PATCH_IF (cols > 1) BEGIN
+      SET max_lvl_plus = cols
+    END
+  BUT_ONLY
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5garns.spl~) BEGIN
+    COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5garns.spl~
+      PHP_EACH druid_only_spells AS dru_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%dru_spl%~ END
+        END
+      END
+      PHP_EACH cleric_druid_spells AS prs_spl => lvl BEGIN
+        PATCH_IF (lvl < max_lvl_plus) BEGIN
+          LPF ADD_SPELL_EFFECT INT_VAR target = 1 opcode = 171 timing = 1 STR_VAR resource = EVAL ~%prs_spl%~ END
+        END
+      END
+    BUT_ONLY
+  END
+  APPEND ~clabpr01.2da~ ~GET_SPELLS  AP_D5GARNS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+END
 
 COPY_EXISTING ~kitlist.2da~ ~override~
   COUNT_2DA_COLS cols
@@ -840,6 +1033,9 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		  COPY_EXISTING ~%kit_table%.2da~ ~override~
 		    REPLACE_TEXTUALLY ~AP_D5SPMEM~ ~****      ~
 		  BUT_ONLY
+		  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+		    APPEND ~%kit_table%.2da~ ~GET_SPELLS  AP_D5GARNS  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5GACLS~
+		  END
         END
       END
     END
