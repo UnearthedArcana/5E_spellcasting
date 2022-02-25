@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~1.6.2~
+VERSION ~1.7~
 
 ALWAYS
 
@@ -33,31 +33,40 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__fnp_spont_option.d5~) BEGIN
   OUTER_SET 5e_divine = 1
 END
 
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 include_divine = %5e_divine% END
+LAF semi_spontaneous_casting END
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
+  LAF semi_divine_spells END
 END
 
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) AND (FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 END
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) BEGIN
+  LAF semi_arcane_spells END
 END
 
-ACTION_IF (FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) AND !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
-  LAF semi_spontaneous_casting INT_VAR include_divine = %5e_divine% END
-END
+LAF process_semi_spells END
 
 LAF 5E_casting_wizards END
+
 ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
   LAF 5E_revised_simulacrum END
 END
+
 LAF 5E_casting_bards END
-ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
-  LAF FnP_free_cast END
-END
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5yspld.spl~) BEGIN
+
+ACTION_IF (5e_divine = 1) BEGIN
+
+  ACTION_IF (FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
+    LAF FnP_free_cast END
+  END
+
   LAF 5E_casting_clerics END
+
   LAF 5E_casting_druids END
+
   LAF 5E_casting_paladins END
+
   LAF 5E_casting_rangers END
+
 END
 
 
