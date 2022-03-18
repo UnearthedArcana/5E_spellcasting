@@ -320,10 +320,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__semi_spont_sequencers.d5~) BEGIN
   END
 END
 
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_new_identify.d5~) BEGIN
-  LAF semi_spont_identify END
-END
-
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_mages.d5~
 
 END	//	end function
@@ -495,10 +491,6 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__semi_spont_sequencers.d5~) BEGIN
       IF_EXISTS BUT_ONLY
     END
   END
-END
-
-ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_new_identify.d5~) BEGIN
-  LAF semi_spont_identify END
 END
 
 END	//	end function

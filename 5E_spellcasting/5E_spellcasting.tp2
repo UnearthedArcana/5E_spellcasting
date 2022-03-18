@@ -1,7 +1,7 @@
 BACKUP ~5E_spellcasting/backup~
 AUTHOR ~SubtleD~
 
-VERSION ~1.8~
+VERSION ~1.8.1~
 
 ALWAYS
 
@@ -40,6 +40,9 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine~) BEGIN
 END
 
 ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane~) BEGIN
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_new_identify.d5~) BEGIN
+    LAF semi_spont_identify END
+  END
   LAF semi_arcane_spells END
 END
 
