@@ -20,6 +20,11 @@ LANGUAGE
   ~english~
   ~5E_spellcasting/lang/english/setup.tra~
 
+LANGUAGE
+  ~French~
+  ~french~
+  ~5E_spellcasting/lang/french/setup.tra~
+
 
 //set all Vancian casters to use 5E system____________________________________________
 //

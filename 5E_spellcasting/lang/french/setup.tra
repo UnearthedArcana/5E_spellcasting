@@ -1,0 +1,29 @@
+@1   = ~~
+@2   = ~~
+@3   = ~~
+@4   = ~~
+@5   = ~~
+@6   = ~...~
+@7   = ~ ~
+//
+@100 = ~Convertir tous les lanceurs de sorts au système 5E~
+@200 = ~Convertir les mages au système 5E~
+@300 = ~Convertir les bardes au système 5E~
+@400 = ~Convertir les clercs au système 5E~
+@500 = ~Convertir les druides au système 5E~
+@600 = ~Convertir les paladins au système 5E~
+@700 = ~Convertir les rôdeurs au système 5E~
+@900 = ~Objects accordant des emplacements de sorts bonus et lanceurs de sorts 5E~
+@901 = ~Bonus à la fois aux emplacements de mémorisation et aux emplacements de lancer de sorts~
+@902 = ~Bonus seulement aux emplacements de lancer de sorts~
+@950 = ~Donner aux lanceurs de sorts 5E des emplacements de sorts bonus en fonction de leurs caractéristiques~
+
+@21989 = ~Emplacement de sort de niveau huit supplémentaire~
+@21990 = ~Emplacement de sort de niveau neuf supplémentaire~
+@21991 = ~Emplacement de sort de niveau un supplémentaire~
+@21992 = ~Emplacement de sort de niveau deux supplémentaire~
+@21993 = ~Emplacement de sort de niveau trois supplémentaire~
+@21994 = ~Emplacement de sort de niveau quatre supplémentaire~
+@21995 = ~Emplacement de sort de niveau cinq supplémentaire~
+@21996 = ~Emplacement de sort de niveau six supplémentaire~
+@21997 = ~Emplacement de sort de niveau sept supplémentaire~
