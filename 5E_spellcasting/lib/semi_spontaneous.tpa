@@ -400,7 +400,7 @@ END
 ACTION_IF !(FILE_EXISTS_IN_GAME ~d5z0slt.spl~) BEGIN
  COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5z0slt.spl~ 
   PATCH_IF (MOD_IS_INSTALLED ~TomeAndBlood.tp2~ ~62~) BEGIN	//	level 1 cantrips
-	LPF ADD_SPELL_EFFECT INT_VAR opcode = 42 target = 1 parameter1 = (0 - 1) parameter2 = 510 /*126*/ timing = 9 END // cover all lvls 1-9 spls
+	LPF ADD_SPELL_EFFECT INT_VAR opcode = 42 target = 1 parameter1 = (0 - 1) parameter2 = 510 /*126*/ timing = 9 END // cover all lvls 2-9 spls
   END
   PATCH_IF !(MOD_IS_INSTALLED ~TomeAndBlood.tp2~ ~62~) BEGIN	//	level 1 cantrips
 	LPF ADD_SPELL_EFFECT INT_VAR opcode = 42 target = 1 parameter1 = (0 - 1) parameter2 = 511 /*127*/ timing = 9 END // cover all lvls 1-9 spls
