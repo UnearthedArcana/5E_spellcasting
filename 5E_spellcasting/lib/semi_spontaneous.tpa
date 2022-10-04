@@ -5993,7 +5993,9 @@ ACTION_PHP_EACH mage_slot_items AS ind => slot_item BEGIN
 	IF_EXISTS BUT_ONLY
   END	//	end if not spell-doubling
   ACTION_IF (%ind_3% = 99) BEGIN
-    ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~ring08~) BEGIN
+   ACTION_IF !(MOD_IS_INSTALLED ~d5_random_tweaks.tp2~ ~3111~) BEGIN
+    ACTION_IF !(MOD_IS_INSTALLED ~d5_random_tweaks.tp2~ ~3112~)
+     ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~ring08~) BEGIN
 	  CREATE EFF ~d5rng8~
 	    WRITE_LONG 0x10 42
 	    WRITE_LONG 0x14 1
@@ -6019,8 +6021,8 @@ ACTION_PHP_EACH mage_slot_items AS ind => slot_item BEGIN
 	    END
         SAY NAME2 @601
         SAY IDENTIFIED_DESC @602
-    END
-    ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~bdring08~) BEGIN
+     END
+     ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~bdring08~) BEGIN
 	  CREATE EFF ~d5rng8~
 	    WRITE_LONG 0x10 42
 	    WRITE_LONG 0x14 1
@@ -6046,8 +6048,8 @@ ACTION_PHP_EACH mage_slot_items AS ind => slot_item BEGIN
 	    END
         SAY NAME2 @601
         SAY IDENTIFIED_DESC @602
-    END
-    ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~ring08_~) BEGIN
+     END
+     ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~ring08_~) BEGIN
 	  CREATE EFF ~d5rng8~
 	    WRITE_LONG 0x10 42
 	    WRITE_LONG 0x14 1
@@ -6073,6 +6075,7 @@ ACTION_PHP_EACH mage_slot_items AS ind => slot_item BEGIN
 	    END
         SAY NAME2 @601
         SAY IDENTIFIED_DESC @602
+     END
     END
     ACTION_IF (~%slot_item%~ STRING_EQUAL_CASE ~ringkon~) BEGIN
 	  CREATE EFF ~d5rngk~
@@ -6155,6 +6158,7 @@ ACTION_PHP_EACH mage_slot_items AS ind => slot_item BEGIN
         SAY NAME2 @621
         SAY IDENTIFIED_DESC @622
     END
+   END
   END	//	end if spell-doubling
  END
 END
