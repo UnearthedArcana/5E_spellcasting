@@ -757,7 +757,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 	      ACTION_FOR_EACH 5e_init_file IN ~d5zz020~ ~d5z0slt~ ~d5zltwz~ ~d5zltwzz~ BEGIN
 	        ACTION_IF (FILE_EXISTS_IN_GAME ~%5e_init_file%.spl~) BEGIN
 	          COPY_EXISTING ~%5e_init_file%.spl~ ~override~
-	            LPF DELETE_EFFEECT INT_VAR match_opcode = 318 match_parameter1 = %kit_ids% STR_VAR match_resource = EVAL ~%5e_init_file%~ END
+	            LPF DELETE_EFFECT INT_VAR match_opcode = 318 match_parameter1 = %kit_ids% STR_VAR match_resource = EVAL ~%5e_init_file%~ END
 	            LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %kit_ids% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = EVAL ~%5e_init_file%~ END
 	          BUT_ONLY
             END
