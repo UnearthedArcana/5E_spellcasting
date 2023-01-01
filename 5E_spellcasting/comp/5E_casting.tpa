@@ -515,7 +515,7 @@ DEFINE_ACTION_FUNCTION FnP_free_cast BEGIN
         READ_2DA_ENTRY row 5 cols system_spher
         READ_2DA_ENTRY row 6 cols spt_ind
         READ_2DA_ENTRY row 7 cols spt_proc
-        PATCH_IF (spt_ind > 100) AND (~%spt_proc%~ STRING_EQUAL_CASE ~no~) BEGIN
+        PATCH_IF (spt_ind > 100) /*AND (~%spt_proc%~ STRING_EQUAL_CASE ~no~)*/ BEGIN
           SNPRINT 3 short_spher ~%system_spher%~
           INNER_ACTION BEGIN
 // free-to-cast spells
