@@ -74,6 +74,37 @@ COPY ~5E_spellcasting/data/5E_casting/d5cstwiz.2da~ ~override~
   LPF arcane_casting_slots STR_VAR table_spl = ~d5zltwz~ END
 BUT_ONLY
 
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5_bard.2da~) BEGIN
+  COPY_EXISTING ~kit.ids~ ~override~
+    COUNT_2DA_ROWS 2 rows
+    FOR (row = 2; row < rows; ++row) BEGIN
+      READ_2DA_ENTRY row 0 2 code
+      READ_2DA_ENTRY row 1 2 kit
+      PATCH_FOR_EACH nubard IN 
+        ~D5_BARD~
+        ~D5_BLADE~
+        ~D5_JESTER~
+        ~D5_SKALD~
+        ~D5_GALLANT~
+        ~D5_MEISTER~
+        ~D5_JINXER~
+        ~D5_ELEGIST~
+        ~D5_HEXBLADE~
+        ~D5_BLADESINGER~
+      BEGIN
+        PATCH_IF (~%kit%~ STRING_EQUAL_CASE ~%nubard%~) BEGIN
+          INNER_ACTION BEGIN
+            COPY_EXISTING ~d5zltwz.spl~ ~override~
+              LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %code% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = ~d5zltwz~ END
+            IF_EXISTS
+          END
+        END
+      END
+    END
+  BUT_ONLY
+END
+
+
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5zmslt.spl~ 
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 42 target = 1 parameter1 = 1 parameter2 = 511 /*127*/ timing = 9 END // should cover lvl 8-9 spls too
   LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 321 target = 1 timing = 1 STR_VAR resource = ~d5zmslt~ END
