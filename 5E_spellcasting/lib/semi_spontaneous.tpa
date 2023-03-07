@@ -1,5 +1,5 @@
 
-// v10.8.1 - remove zz206 effects when out of party
+// v10.9 - 5E spellstate when dual-classing
 
 /* ***** need to track ME spell tables for sorcerer casting
 
@@ -871,6 +871,8 @@ COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5zprp.spl~
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 146 target = 1 parameter1 = 0 parameter2 = 1 timing = 1 STR_VAR resource = ~d5zz206~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 146 target = 1 parameter1 = 0 parameter2 = 1 timing = 1 STR_VAR resource = ~d5zprp1~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 139 target = 1 parameter1 = %prep_message% timing = 1 END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %semi_spont_divine% parameter2 = 111 timing = 1 STR_VAR resource = ~d5zz010~ END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter1 = %semi_spont_arcane% parameter2 = 111 timing = 1 STR_VAR resource = ~d5zz020~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 146 target = 1 parameter2 = 1 timing = 1 duration = 0 STR_VAR resource = ~d5zz172~ END
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 1 timing = 1 STR_VAR resource = ~d5zprp~ END
 
