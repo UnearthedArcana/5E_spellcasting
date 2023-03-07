@@ -231,6 +231,10 @@ ACTION_FOR_EACH school IN ~abj~ ~con~ ~div~ ~enc~ ~ill~ ~evo~ ~nec~ ~alt~ ~gen~ 
 */
 END  
 
+ACTION_IF (MOD_IS_INSTALLED ~tomeandblood.tp2~ ~40~) BEGIN	//	revised specialists
+  
+END
+
 APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
 COPY_EXISTING ~splprot.2da~ ~override~
 	COUNT_2DA_COLS cols
@@ -320,17 +324,13 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
   END
 BUT_ONLY
 
-ACTION_FOR_EACH tnb_spec_spl IN ~d5_conj1~ ~d5_conj2~ ~d5_conj3~ ~d5_conj4~ ~d5_conj5~ ~d5_conj6~ ~d5_conj7~  ~~ BEGIN
+ACTION_FOR_EACH tnb_spec_spl IN ~d5_conv1~ ~d5_conv2~ ~d5_conv3~ ~d5_conj1~ ~d5_conj2~ ~d5_conj3~ ~d5_conj4~ ~d5_conj5~ ~d5_conj6~ ~d5_conj7~  ~~ BEGIN
   ACTION_IF (FILE_EXISTS_IN_GAME ~%tnb_spec_spl%.spl~) BEGIN
-    OUTER_SPRINT $tnb_spec_spells(~%tnb_spec_spl%~) ~1~
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%tnb_spec_spl%~ cast_spell = EVAL ~%tnb_spec_spl%~ spell_type = ~arcane~ END
   END
 END
 
-ACTION_IF FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~ BEGIN
-  ACTION_PHP_EACH tnb_spec_spells AS spec_spl => ind BEGIN
-    LAF add_semi_spells STR_VAR new_spell = EVAL ~%spec_spl%~ cast_spell = EVAL ~%spec_spl%~ spell_type = ~arcane~ END
-  END
-END
+LAF process_semi_spells END
 
 //add compatible versions of sequencers and identify__________________________________
 //
