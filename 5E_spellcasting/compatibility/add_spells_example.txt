@@ -1,0 +1,93 @@
+
+ADDING COMPATIBILITY WITH 5E SPELLCASTING FEATURES
+
+If your spells are added in the kit 'CLAB' table individually via "GA_D5_NW_1" then you do not need to do anything - you mod is already compatible with 5E Casting.
+
+But if you add the spells a different way, then you must make a list of them and use a function to add them to the 5E spellcasting system.
+
+First, put the accompanying .tpa file in your mod. I suggest in a "/lib" folder. Then, INCLUDE the file so you can use the functions.
+
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+
+INCLUDE ~%MOD_FOLDER%/lib/add_semi_spells.tpa~
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+
+Let's say your mod adds special spells for a wizard kit. I might name them D5_NW_1.spl, D5_NW_2.spl, etc. Make the list of spells, with an array or a simple ACTION_FOR_EACH, and run the function on each spell.
+
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+
+ACTION_FOR_EACH my_spl IN 
+  ~D5_NW_1~
+  ~D5_NW_2~
+  ~D5_NW_3~
+  ~D5_NW_4~
+  ~D5_NW_5~
+  ~D5_NW_6~
+  ~D5_NW_7~
+  ~D5_NW_8~
+  ~D5_NW_9~
+BEGIN
+
+  LAF add_semi_spells STR_VAR new_spell = EVAL ~%my_spl%~ cast_spell = EVAL ~%my_spl%~ spell_type = ~arcane~ END
+
+END
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+
+If these are cleric/druid spells, change that 'arcane' to 'divine.'
+
+
+------
+
+
+For basic compatibility with 5E Spellcasting, that is all you need to do. 
+Add that to your mod and make sure it is installed before 5E Casting.
+But if you want to get a bit fancy, you can do special things in the 5E Casting system.
+
+
+------
+
+
+Note, the function inputs %my_spl% twice, in the 'new_spell' and 'cast-spell' variables. 
+This is to separate what is memorized from what is cast.
+So let's say your 8th level wizard spell actually casts the 6th level cleric spell "Heal."
+You can have the 5E system MEMORIZE your new spell, but CAST the original priest spell.
+
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+
+LAF add_semi_spells STR_VAR new_spell = ~D5_NW_8~ cast_spell = ~SPPR607~ spell_type = ~arcane~ END
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+
+This way the game will recognize that you cast "Heal" on someone, for purposes of scripted events like with Yakman in the 3rd level of Watcher's Keep.
+
+
+------
+
+
+You can set your new spells to always be available to cast, without needing memorization slots. After adding them, run this function:
+
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+
+ACTION_FOR_EACH my_spl IN 
+  ~D5_NW_1~
+  ~D5_NW_2~
+  ~D5_NW_3~
+  ~D5_NW_4~
+  ~D5_NW_5~
+  ~D5_NW_6~
+  ~D5_NW_7~
+  ~D5_NW_8~
+  ~D5_NW_9~
+BEGIN
+
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%my_spl%~ list_spell = ~D5_NW_0~ END
+
+END
+
+APPEND ~kit_clab.2da~ ~FREE_SPLS    AP_D5_NW_0  ****        ****        ****        **** ~
+
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+
+The 'list_spell' does not need to exist; you just make up a name for the spell, the function will create it and then you apply it you your kit or NPC or whatever.
