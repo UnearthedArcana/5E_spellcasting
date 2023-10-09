@@ -1,23 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>5E-style spellcasting</title>
+<title>SubtleMods: 5E-style spellcasting</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" href="style/g3readme_cam.css" type="text/css" />
 <link href="style/g3icon.ico" rel="icon" type="image/bmp" />
 </head>
 <body>
-<h1>A major rules conversion covering how wizards and priests cast spells</h1>
+<h1>SubtleMods: D&D 5th Edition-style Spellcasting</h1>
 <div class="section">
-  <p><strong>Author:</strong> <a href="http://forums.gibberlings3.net/index.php?showuser=6306">Duns Scotus, the SubtleDoctor</a><br />
-</p>
-  <p><strong> Version 1.20 </strong><br />
-    <strong> Languages:</strong> English<br />
-    <strong>Platforms: </strong>Windows, MacOS</p>
+  <p><strong> Version 2.0 </strong><br />
+  <strong> Languages:</strong> English</p>
+  <p><strong>Author: <a href="http://forums.gibberlings3.net/index.php?showuser=6306">The Subtle Doctor</a></strong></p>
+  <p><strong><a href="https://github.com/UnearthedArcana/5E_spellcasting">Home page</a></strong></p>
+  <p><strong><a href="https://www.gibberlings3.net/forums/topic/32551-subtlemods-5e-spellcasting-rules-conversion/">Discussion Forum</a></strong></p>
+  <p><strong><a href="https://github.com/UnearthedArcana/5E_spellcasting/releases">Download</a></strong></p>
 </div>
 <h2>Overview</h2>
 <div class="section">
-  <p>This mod will allow all 2E 'Vancian' spellcasters in the game to instead use 5E-style "semi-spontaneous" spellcasting. Thus, casters will have the flexibility of normal casters in learning lots of spells, and the flexibility of sorcerers in casting spells spontaneously.</p>
+  <p>This mod will allow 2E 'Vancian' spellcasters in the game to instead use 5E-style spellcasting, what I call "semi-spontaneous" casting (as opposed to the "full spontaneous" system that sorcerers use).  Thus, casters will have the flexibility of normal casters in learning lots of spells, and the flexibility of sorcerers in casting spells spontaneously.</p>
   <p><b>Note:</b> this mod makes heavy use of the EE 2.0+ engine features. I would not even try to install this on a game version lower than 2.5.</p>
 </div>
 <h2>Installation</h2>
@@ -25,7 +26,7 @@
   <p><strong>Windows:</strong><br />
     The mod archive should be extracted into your game folder from the archive (or just unzipped and then copied there). If properly extracted, you should have a "5E_spellcasting" folder and "setup-5E_spellcasting.exe" in your game folder. To install, simply double-click "setup-5E_spellcasting.exe" and then follow the instructions on screen.</p>
   <p><strong>MacOS:</strong><br />
-    This mod is packaged and installed with the Mac Weidu Launcher (MWL). To install, simply extract the contents of the mod and then move them into your game folder. If properly extracted, you should now have a folder called "5E_spellcasting" and the "Mac WeiDU Launcher" in your game directory. To install, simply double-click the MWL, choose "5E_spellcasting" from the list, and then follow the instructions on the screen.</p>
+    This mod is packaged with the abre mod folder. IMO the easiest way to install this on Macs is with the Mac Weidu Launcher (MWL). To install, simply extract the contents of the mod and then move them into your game folder. If properly extracted, you should now have a folder called "5E_spellcasting" and the "Mac WeiDU Launcher" in your game directory. To install, simply double-click the MWL, choose "5E_spellcasting" from the list, and then follow the instructions on the screen.</p>
 </div>
 <h2>Compatibility</h2>
 <div class="section">
@@ -35,7 +36,7 @@
 </div>
 <h2>Contents</h2>
 <div class="section">
-  <h4 class="subheader">5E-Style Spellcasting</h4>
+  <h4 class="subheader">5E-Style Spellcasting for All Casters</h4>
   <div class="section">
     <p>This mod has an ambitious scope: to change the fundamental spellcasting mechanism for all spellcasters in the game. The short description is, it makes the game use D&D 5E rules for how spell slots work.</p>
     <p>For a proper, longer explanation, let's start with a brief run-down of spellcasting in BG games. You can <b>know</b> spells, and you can <b>memorize</b> spells, and you can <b>cast</b> spells. In the old AD&D 2E rules, which the BG games use, your known spells are one thing, but the spells you memorize and the spells you can cast are identical - memorize Magic Missile twice, and you can cast Magic Missile twice. Contrast with sorcerers: their known spells and the spells they can cast are identical, but there is no memorization. If you have two 1st-level casting slots, then you can cast any of your known 1st-level spells as many as two times. (This mod does not change sorcerers at all, I'm just mentioning them to tease out the way these systems work.)</p>
@@ -55,7 +56,19 @@
     </ul>
     <p>I am happy to say this mod should now be compatible with the 'Revised Specialists' component of Tome & Blood. That component allows specialist mages to spontaneously cast spells in their chosen school, but the mechanism is clunky; this mod removes that mechanism and replaces it with a more streamlined version: specialists: are automatically able to cast any spell in their chosen school without having to prepare them. They lose one memorization slot per level in exchange, but they will often have more than one spell in their specialty at most levels, so it should be a net gain. (I particularly recommend the 'Rebalance Spell Schools' component on Tome & Blood in conjunction with this, since it makes sure that there are two or more spells from each school at each spell level.) The other specialist advantages in Tome & Blood's Revised Specialists component will be retained if this mod is installed after it.</p>
     <p>This should be compatible with other mods that affect spells and spellcasting. For example it should work with Tome & Blood's 'Revised Invisibility' and 'Revised Illusionary Clones,' and I have gone to great lengths to make sure it is compatible with all aspects of the Faiths & Powers mod. Though note, F&P has an option to give all priests the option to learn and cast spells like a sorcerer... if that component is installed, then priests will <b>not</b> get 5E-style spellcasting from this mod. In that case arcane casters will use 5E casting, and divine casters will have the option to choose between Vancian casting and sorcerer-style castsing.</p>
-    <p>laso PLEASE NOTE: I have specifically excluded spellcasters from AionZ's 'Shadow Magic' mod from these changes, since they use different spells and different spell-learning and -casting mechanisms, with which I am not familiar. I would rather have that mod work just the way its author envisioned, than risk screwing it up.</p>
+  </div>
+</div>
+<div class="section">
+  <h4 class="subheader">5E-Style Spellcasting</h4>
+  <div class="section">
+    <p>This mod has an ambitious scope: to change the fundamental spellcasting mechanism for all spellcasters in the game. The short description is, it makes the game use D&D 5E rules for how spell slots work.</p>
+    <p>NOTE: this will also affect the multiclass "Revised Bard" kits from Might & Guile, if that mod is installed first.</p>
+  </div>
+</div>
+<div class="section">
+  <h4 class="subheader">Bonus Spell Slot Items and 5E Casting</h4>
+  <div class="section">
+    <p>These components allow you to choose how bonus slot items will work with 5E casters. By default they increase spellbook slots, i.e. memorization slots, for wizards and casting slots for sorcerers. You can choose how they should affect 5E casters: change to increasing casting slots, or increase both memorization slots <b>and</b> casting slots. <b>NOTE:</b> for technical reasons, in the latter two instances, slot-increasing items can only increase one casting slot of each spell level. So the Ring of Acuity which normally gives +2 2nd-level slots and +1 3rd- and 4th-level slots, will now give +1 2nd-, 3rd-, and 4th-level slots. This is unavoidable, sorry. (You can still get +2 or more slots of a given spell level if you mix two or more bonus-slot items.)</p>
   </div>
 </div>
 <h2>Contact Information</h2>
