@@ -1,15 +1,13 @@
 BACKUP ~weidu_external/backup/5E_spellcasting~
 AUTHOR ~SubtleD~
 
-VERSION ~1.21~
+VERSION ~2.0~
 
 ALWAYS
 
   INCLUDE ~5E_spellcasting/lib/semi_spontaneous.tpa~
 
   INCLUDE ~5E_spellcasting/comp/5E_casting.tpa~
-
-  INCLUDE ~5E_spellcasting/lib/semi_spont/misc_functions.tpa~
   
 END
 
@@ -90,12 +88,71 @@ END
 //__________________________________________________________________________________
 
 
+BEGIN @300
+DESIGNATED 300
+FORBID_COMPONENT ~5E_spellcasting~ ~100~ @3
+LABEL ~D5_5E_CASTING_BARDS~
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5__fnp_spont_option.d5~) BEGIN
+  OUTER_SET 5e_divine = 0
+END
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__fnp_spont_option.d5~) BEGIN
+  OUTER_SET 5e_divine = 1
+END
+
+ACTION_IF (MOD_IS_INSTALLED ~Might_and_Guile.tp2~ ~400~) BEGIN
+  LAF semi_spontaneous_casting END
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_divine.d5~) BEGIN
+    LAF semi_divine_spells END
+  END
+END
+
+ACTION_IF !(MOD_IS_INSTALLED ~Might_and_Guile.tp2~ ~400~) BEGIN
+  LAF semi_spontaneous_casting INT_VAR include_arcane = 1 END
+END
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) BEGIN
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~d5_new_identify.d5~) BEGIN
+    LAF semi_spont_identify END
+  END
+  LAF semi_arcane_spells END
+END
+
+LAF process_semi_spells END
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
+  LAF 5E_revised_simulacrum END
+END
+
+LAF 5E_casting_bards END
+
+/* don't need this...?
+ INCLUDE ~5E_spellcasting/comp/2E_bards_5E_casting.tpa~
+ LAF 5E_casting_2E_bards END
+*/
+
+ACTION_IF (MOD_IS_INSTALLED ~Might_and_Guile.tp2~ ~400~) BEGIN
+  INCLUDE ~5E_spellcasting/comp/revised_bards_5E_casting.tpa~
+  LAF 5E_casting_nu_bards END
+  COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_divine.d5~
+END
+
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_arcane.d5~
+COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_bards.d5~
+
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+
 //bonus casting slots from items - with mem slots___________________________________
 //
 BEGIN @901
 DESIGNATED 901
 LABEL ~D5_5E_ITEM_MEM_CASTING_SLOTS~
 SUBCOMPONENT @900
+FORBID_COMPONENT ~TomeandBlood.tp2~ ~92~ @1
+FORBID_COMPONENT ~TomeandBlood.tp2~ ~93~ @1
 //REQUIRE_PREDICATE (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) @1
 
 ACTION_IF (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) BEGIN
@@ -122,16 +179,4 @@ END
 //__________________________________________________________________________________
 //__________________________________________________________________________________
 
-/* don't include this, just install it from SoB
-
-//bonus casting slots from stats for 5E casters______________________________________
-//
-BEGIN @950
-DESIGNATED 950
-REQUIRE_PREDICATE (MOD_IS_INSTALLED ~5E_spellcasting.tp2~ ~100~) @1
-
-LAM semi_int_slots
-LAM semi_wis_slots
-
-*/
 

@@ -1,0 +1,1005 @@
+
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+//
+//					    	5E CASTING FOR REVISED BARDS
+//__________________________________________________________________________________
+//__________________________________________________________________________________
+
+
+DEFINE_ACTION_FUNCTION 5E_casting_nu_bards BEGIN
+
+
+// splprot kit check__________________________________________________________________
+//
+APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
+COPY_EXISTING ~splprot.2da~ ~override~
+	COUNT_2DA_COLS cols
+	READ_2DA_ENTRIES_NOW rows cols
+	FOR (row = 1; row < rows; ++row) BEGIN
+	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
+	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
+	    SET kit_is_row = %row%
+	  END
+	END
+BUT_ONLY
+//___________________________________________________________________________________
+
+
+ACTION_DEFINE_ASSOCIATIVE_ARRAY bard_kits_list BEGIN
+  d5_whsl => T
+  d5_lors => C
+  d5_lort => C
+  d5_bard => W
+  d5_blade => W
+  d5_jstr => W
+  d5_skld => W
+  d5_glnt => W
+  d5_mstr => W
+  d5_jinx => W
+  d5_eleg => W
+  d5_agnt => T
+  d5_hxbl => W
+  d5_hrld => T
+  d5_blads => W
+END
+
+// ***** need to find each kit's IDS code
+COPY_EXISTING ~kitlist.2da~ ~override~
+  READ_2DA_ENTRIES_NOW rows 10
+  FOR (row = 1; row < rows; ++row) BEGIN
+   READ_2DA_ENTRY row 5 10 kit_clab
+   READ_2DA_ENTRY row 9 10 kit_code
+   PHP_EACH bard_kits_list AS clab => type BEGIN
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~%clab%~) BEGIN
+      SPRINT $full_kits_list(~%kit_clab%~ ~%kit_code%~) ~%type%~
+    END
+   END
+  END
+BUT_ONLY
+
+ACTION_PHP_EACH full_kits_list AS kit =>typ BEGIN
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_whsl~) BEGIN
+      OUTER_SET nu_whistler_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_lors~) BEGIN
+      OUTER_SET nu_loresinger_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_lort~) BEGIN
+      OUTER_SET nu_loresinger_t_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_bard~) BEGIN
+      OUTER_SET nu_bard_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_blade~) BEGIN
+      OUTER_SET nu_blade_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_jstr~) BEGIN
+      OUTER_SET nu_jester_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_skld~) BEGIN
+      OUTER_SET nu_skald_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_glnt~) BEGIN
+      OUTER_SET nu_gallant_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_mstr~) BEGIN
+      OUTER_SET nu_meister_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_jinx~) BEGIN
+      OUTER_SET nu_jinxer_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_hxbl~) BEGIN
+      OUTER_SET nu_hexblade_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_eleg~) BEGIN
+      OUTER_SET nu_elegist_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_agnt~) BEGIN
+      OUTER_SET nu_agent_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_hrld~) BEGIN
+      OUTER_SET nu_herald_code = %kit_code%
+    END
+    ACTION_IF (~%kit%~ STRING_EQUAL_CASE ~d5_blads~) BEGIN
+      OUTER_SET nu_bladesinger_code = %kit_code%
+    END
+END
+
+
+<<<<<<<< d5/d5cstmbd.2da
+2DA V1.0
+0
+        1   2   3   4   5   6   7   8
+1       1   0   0   0   0   0   0   0
+2       2   0   0   0   0   0   0   0
+3       3   1   0   0   0   0   0   0
+4       4   1   0   0   0   0   0   0
+5       4   2   1   0   0   0   0   0
+6       4   3   1   0   0   0   0   0
+7       4   4   2   1   0   0   0   0
+8       5   4   3   1   0   0   0   0
+9       5   4   3   2   1   0   0   0
+10      5   4   4   3   1   0   0   0
+11      5   4   4   3   2   0   0   0
+12      5   5   4   3   2   1   0   0
+13      5   5   4   4   3   1   0   0
+14      5   5   4   4   3   2   1   0
+15      5   5   5   4   4   2   1   0
+16      5   5   5   5   4   3   1   1
+17      5   5   5   5   5   3   2   1
+18      5   5   5   5   5   4   3   2
+19      5   5   5   5   5   5   4   2
+20      5   5   5   5   5   5   5   3
+21      5   5   5   5   5   5   5   4
+22      5   5   5   5   5   5   5   4
+23      5   5   5   5   5   5   5   4
+24      5   5   5   5   5   5   5   4
+25      5   5   5   5   5   5   5   4
+26      5   5   5   5   5   5   5   4
+27      5   5   5   5   5   5   5   4
+28      5   5   5   5   5   5   5   4
+29      5   5   5   5   5   5   5   4
+30      5   5   5   5   5   5   5   4
+31      5   5   5   5   5   5   5   4
+32      5   5   5   5   5   5   5   4
+33      5   5   5   5   5   5   5   4
+34      5   5   5   5   5   5   5   4
+35      5   5   5   5   5   5   5   4
+36      5   5   5   5   5   5   5   4
+37      5   5   5   5   5   5   5   4
+38      5   5   5   5   5   5   5   4
+39      5   5   5   5   5   5   5   4
+40      5   5   5   5   5   5   5   4
+>>>>>>>>
+COPY ~d5/d5cstmbd.2da~ ~override~
+COPY_EXISTING ~d5cstmbd.2da~ ~override~
+  LPF arcane_casting_slots STR_VAR table_spl = ~d5zltmb~ END
+BUT_ONLY
+
+COPY_EXISTING ~d5zltmb.spl~ ~override~
+    WRITE_SHORT 0x1c 1
+IF_EXISTS BUT_ONLY
+
+<<<<<<<< d5/d5cstprs.2da
+2DA V1.0
+0
+        1   2   3   4   5   6   7
+1       2   0   0   0   0   0   0
+2       3   0   0   0   0   0   0
+3       4   1   0   0   0   0   0
+4       5   2   0   0   0   0   0
+5       5   3   1   0   0   0   0
+6       5   4   2   0   0   0   0
+7       5   5   2   1   0   0   0
+8       5   5   3   2   0   0   0
+9       5   5   4   2   1   0   0
+10      5   5   4   3   2   0   0
+11      5   5   5   4   2   1   0
+12      5   5   5   4   3   2   0
+13      5   5   5   5   4   2   0
+14      5   5   5   5   4   3   1
+15      5   5   5   5   5   3   2
+16      5   5   5   5   5   4   2
+17      5   5   5   5   5   4   3
+18      5   5   5   5   5   5   3
+19      5   5   5   5   5   5   4
+20      5   5   5   5   5   5   5
+21      5   5   5   5   5   5   5
+22      5   5   5   5   5   5   5
+23      5   5   5   5   5   5   5
+24      5   5   5   5   5   5   5
+25      5   5   5   5   5   5   5
+26      5   5   5   5   5   5   5
+27      5   5   5   5   5   5   5
+28      5   5   5   5   5   5   5
+29      5   5   5   5   5   5   5
+30      5   5   5   5   5   5   5
+31      5   5   5   5   5   5   5
+32      5   5   5   5   5   5   5
+33      5   5   5   5   5   5   5
+34      5   5   5   5   5   5   5
+35      5   5   5   5   5   5   5
+36      5   5   5   5   5   5   5
+37      5   5   5   5   5   5   5
+38      5   5   5   5   5   5   5
+39      5   5   5   5   5   5   5
+40      5   5   5   5   5   5   5
+>>>>>>>>
+COPY ~d5/d5cstprs.2da~ ~override~
+COPY_EXISTING ~d5cstprs.2da~ ~override~
+  LPF divine_casting_slots STR_VAR table_spl = ~d5zltbc~ END
+BUT_ONLY
+
+COPY_EXISTING ~d5zltbc.spl~ ~override~
+    WRITE_SHORT 0x1c 2
+IF_EXISTS BUT_ONLY
+
+COPY_EXISTING ~d5zprpd.spl~ ~override~
+			  ~d5zrfsh.spl~ ~override~
+  PATCH_PHP_EACH full_kits_list AS clab => kind BEGIN
+    PATCH_IF (~%kind%~ STRING_EQUAL_CASE ~W~) BEGIN 
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 326 target = 1 parameter1 = %clab_1% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltmbz~ END
+    END
+    PATCH_IF (~%kind%~ STRING_EQUAL_CASE ~C~) BEGIN 
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 326 target = 1 parameter1 = %clab_1% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zltbcz~ END
+    END
+  END
+IF_EXISTS BUT_ONLY
+
+// add 318 effects to exempt bards from other 5E casting slots
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltwz.spl~) AND (FILE_CONTAINS_EVALUATED (~clabma01.2da~ ~AP_D5ZLTWZ~)) BEGIN
+  COPY_EXISTING ~d5zltwz.spl~ ~override~
+    PHP_EACH full_kits_list AS clab => kind BEGIN
+      PATCH_IF (~%kind%~ STRING_EQUAL_CASE ~W~) BEGIN
+	    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %clab_1% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = ~d5zltwz~ END
+	  END
+	END
+  BUT_ONLY
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltcl.spl~) AND (FILE_CONTAINS_EVALUATED (~clabpr01.2da~ ~AP_D5ZLTCL~)) BEGIN
+  COPY_EXISTING ~d5zltcl.spl~ ~override~
+    PHP_EACH full_kits_list AS clab => kind BEGIN
+      PATCH_IF (~%kind%~ STRING_EQUAL_CASE ~C~) BEGIN
+	    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %clab_1% parameter2 = %kit_is_row% timing = 0 duration = 1 STR_VAR resource = ~d5zltcl~ END
+	  END
+	END
+  BUT_ONLY
+END
+
+ACTION_IF (MOD_IS_INSTALLED ~tomeandblood.tp2~ ~62~) OR (MOD_IS_INSTALLED ~SubtleD_Spell_Tweaks.tp2~ ~62~) BEGIN	//	L1 cantrips
+  COPY_EXISTING ~d5bdslt.spl~ ~override~
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (2 << 4) paramater1 = (1 << 4) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (3 << 4) paramater1 = (1 << 4) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (4 << 4) paramater1 = (1 << 4) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (5 << 4) paramater1 = (1 << 4) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (6 << 8) paramater1 = (7 << 8) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (5 << 8) paramater1 = (6 << 8) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (4 << 8) paramater1 = (5 << 8) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (3 << 8) paramater1 = (4 << 8) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (2 << 8) paramater1 = (3 << 8) END
+    LPF ALTER_EFFECT INT_VAR match_opcode = 233 match_parameter1 = (1 << 8) paramater1 = (2 << 8) END
+    LPF ADD_SPELL_EFFECT INT_VAR header = 3 opcode = 233 target = 1 parameter1 = (1 << 8) parameter2 = (108 + (0x10000 * 1)) timing = 9 END
+  IF_EXISTS BUT_ONLY
+END
+
+// metamagic scrolls__________________________________________________________________
+//
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5x9spl.spl~) BEGIN
+  COPY ~might_and_guile/lib/d5_base.spl~ ~override/d5x9spl.spl~
+	PATCH_IF (FILE_EXISTS_IN_GAME ~d5zltwz.spl~) BEGIN
+	  LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 parameter1 = (0 - 1) timing = 9 STR_VAR resource = ~d5zltwz~ END
+	END
+  BUT_ONLY
+END
+
+// add more bard spells_______________________________________________________________
+//
+// BARD:
+
+// Command:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp102.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp102~ cast_spell = ~sppr102~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bp102~)  ~1~
+END
+
+// Vocalize - lvl 1:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bw219.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bw219~ cast_spell = ~spwi219~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bw219~)~1~
+END
+
+// Silence:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp211.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp211~ cast_spell = ~sppr211~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bp211~) ~1~
+END
+
+// IWD Shout:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bw431.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bw431~ cast_spell = ~d5bw431~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bw431~) ~1~
+END
+
+// Exaltation/Break Enchantment:
+ACTION_IF !(FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~) AND (FILE_EXISTS_IN_GAME ~d5bp321.spl~) BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp321~ cast_spell = ~ohtyr1~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bp321~) ~1~
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~) AND (FILE_EXISTS_IN_GAME ~spwi410.spl~) BEGIN
+  OUTER_SPRINT $bard_free_spells(~spwi410~) ~1~
+END
+
+// Greater Command:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp512.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp512~ cast_spell = ~sppr512~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bp512~) ~1~
+END
+
+// IWD Great Shout:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bw806.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bw806~ cast_spell = ~d5bw806~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bw806~) ~1~
+END
+
+// Earthquake:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp720.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp720~ cast_spell = ~sppr720~ spell_type = ~arcane~ END
+  OUTER_SPRINT $bard_free_spells(~d5bp720~) ~1~
+END
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~spwi612.spl~) BEGIN
+  OUTER_SPRINT $bard_free_spells(~spwi612~) ~1~
+END
+
+// JESTER:
+
+// Miscast Magic:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp310.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp310~ cast_spell = sppr310~~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jester_free_spells(~d5bp310~) ~1~
+END
+
+// Rigid Thinking:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp311.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp311~ cast_spell = ~sppr311~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jester_free_spells(~d5bp311~) ~1~
+END
+
+// Free Action:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp403.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp403~ cast_spell = ~sppr403~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jester_free_spells(~d5bp403~) ~1~
+END
+
+// Chaotic Commands:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp508.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp508~ cast_spell = ~sppr508~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jester_free_spells(~d5bp508~) ~1~
+END
+
+// Physical Mirror:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp613.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp613~ cast_spell = ~sppr613~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jester_free_spells(~d5bp613~) ~1~
+END
+
+// Entropy Shield:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp615.spl~ BEGIN
+  OUTER_SET spell_ids = IDS_OF_SYMBOL (~spell~ ~CLERIC_ENTROPY_SHIELD~)
+  ACTION_IF !(spell_ids = 0 - 1) BEGIN
+    LAF RES_NUM_OF_SPELL_NAME STR_VAR spell_name = ~CLERIC_ENTROPY_SHIELD~ RET spell_res END
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp615~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+  END
+  ACTION_IF (spell_ids = 0 - 1) BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp615~ cast_spell = ~d5bp615~ spell_type = ~arcane~ END
+  END
+  OUTER_SPRINT $jester_free_spells(~d5bp615~) ~1~
+END
+
+// SKALD:
+
+// Remove Fear:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp108.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp108~ cast_spell = ~sppr108~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp108~) ~1~
+END
+
+// Flame Blade:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp206.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp206~ cast_spell = ~sppr206~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp206~) ~1~
+END
+
+// DUHM:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp214.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp214~ cast_spell = ~sppr214~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp214~) ~1~
+END
+
+// Def. Harmony:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp406.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp406~ cast_spell = ~sppr406~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp406~) ~1~
+END
+
+// Righteous Magic:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp513.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp513~ cast_spell = ~sppr513~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp513~) ~1~
+END
+
+// Magic Resistance:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp509.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp509~ cast_spell = ~sppr509~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp509~) ~1~
+END
+
+// Blade Barrier:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp603.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp603~ cast_spell = ~sppr603~ spell_type = ~arcane~ END
+  OUTER_SPRINT $skald_free_spells(~d5bp603~) ~1~
+END
+
+// GALLANT:
+
+// Armor of Faith:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp111.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp111~ cast_spell = ~sppr111~ spell_type = ~arcane~ END
+  OUTER_SPRINT $gallant_free_spells(~d5bp111~) ~1~
+END
+
+// Aid:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp201.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp201~ cast_spell = ~sppr201~ spell_type = ~arcane~ END
+  OUTER_SPRINT $gallant_free_spells(~d5bp201~) ~1~
+END
+
+// Cure Disease:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp317.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp317~ cast_spell = ~sppr317~ spell_type = ~arcane~ END
+  OUTER_SPRINT $gallant_free_spells(~d5bp317~) ~1~
+END
+
+// Pro Evil 10':
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp408.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp408~ cast_spell = ~sppr408~ spell_type = ~arcane~ END
+  OUTER_SPRINT $gallant_free_spells(~d5bp408~) ~1~
+END
+
+// NPP - level 5:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp413.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp413~ cast_spell = ~sppr413~ spell_type = ~arcane~ END
+  OUTER_SPRINT $gallant_free_spells(~d5bp413~) ~1~
+END
+
+// Mass Cure - level 6:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp514.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp514~ cast_spell = ~sppr514~ spell_type = ~arcane~ END
+  OUTER_SPRINT $gallant_free_spells(~d5bp514~) ~1~
+END
+
+OUTER_SPRINT $gallant_free_spells(~spwi113~) ~1~
+
+// MEISTERSINGER:
+
+// Entangle:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp105.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp105~ cast_spell = ~sppr105~ spell_type = ~arcane~ END
+  OUTER_SPRINT $meister_free_spells(~d5bp105~) ~1~
+END
+
+// Goodberry:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp207.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp207~ cast_spell = ~sppr207~ spell_type = ~arcane~ END
+  OUTER_SPRINT $meister_free_spells(~d5bp207~) ~1~
+END
+
+// Barkskin:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp202.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp202~ cast_spell = ~sppr202~ spell_type = ~arcane~ END
+  OUTER_SPRINT $meister_free_spells(~d5bp202~) ~1~
+END
+
+// ZoSA:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp318.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp318~ cast_spell = ~sppr318~ spell_type = ~arcane~ END
+  OUTER_SPRINT $meister_free_spells(~d5bp318~) ~1~
+END
+
+// IWD Thorn Spray
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp427.spl~ BEGIN
+  OUTER_SET spell_ids = IDS_OF_SYMBOL (~spell~ ~CLERIC_THORN_SPRAY~)
+  ACTION_IF !(spell_ids = 0 - 1) BEGIN
+    LAF RES_NUM_OF_SPELL_NAME STR_VAR spell_name = ~CLERIC_THORN_SPRAY~ RET spell_res END
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp427~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+  END
+  ACTION_IF (spell_ids = 0 - 1) BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp427~ cast_spell = ~d5bp427~ spell_type = ~arcane~ END
+  END
+  OUTER_SPRINT $meister_free_spells(~d5bp427~) ~1~
+END
+
+// IWD Spike Growth
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp324.spl~ BEGIN
+  OUTER_SET spell_ids = IDS_OF_SYMBOL (~spell~ ~CLERIC_SPIKE_GROWTH~)
+  ACTION_IF !(spell_ids = 0 - 1) BEGIN
+    LAF RES_NUM_OF_SPELL_NAME STR_VAR spell_name = ~CLERIC_SPIKE_GROWTH~ RET spell_res END
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp324~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+  END
+  ACTION_IF (spell_ids = 0 - 1) BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp324~ cast_spell = ~d5bp324~ spell_type = ~arcane~ END
+  END
+  OUTER_SPRINT $meister_free_spells(~d5bp324~) ~1~
+END
+
+// Woodland Beings:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp410.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp410~ cast_spell = ~sppr410~ spell_type = ~arcane~ END
+  OUTER_SPRINT $meister_free_spells(~d5bp410~) ~1~
+END
+
+// Nature's Beauty:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp704.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp704~ cast_spell = ~sppr704~ spell_type = ~arcane~ END
+  OUTER_SPRINT $meister_free_spells(~d5bp704~) ~1~
+END
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~) BEGIN
+// SR AS 1
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp149.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp149~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp149~) ~1~
+  END
+
+// SR AS 2
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp249.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp249~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp249~) ~1~
+  END
+
+// SR AS 3
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp349.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp349~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp349~) ~1~
+  END
+
+// SR AS 4
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp449.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp449~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp449~) ~1~
+  END
+
+// SR AS 5
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp549.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp549~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp549~) ~1~
+  END
+
+// SR AS 6
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp649.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp649~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp649~) ~1~
+  END
+
+// SR AS 7
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp749.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp749~ cast_spell = EVAL ~%spell_res%~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp749~) ~1~
+  END
+END
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~) BEGIN
+// AS I:
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp402.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp402~ cast_spell = ~sppr402~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp402~) ~1~
+  END
+
+// ASII:
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp501.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp501~ cast_spell = ~sppr501~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp501~) ~1~
+  END
+
+// AS III:
+  ACTION_IF FILE_EXISTS_IN_GAME ~d5bp602.spl~ BEGIN
+      LAF add_semi_spells STR_VAR new_spell = ~d5bp602~ cast_spell = ~sppr602~ spell_type = ~arcane~ END
+    OUTER_SPRINT $meister_free_spells(~d5bp602~) ~1~
+  END
+END
+
+// JINXER:
+
+// Doom:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp113.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp113~ cast_spell = ~sppr113~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jinxer_free_spells(~d5bp113~) ~1~
+END
+
+// IWD Curse:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp112.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp112~ cast_spell = ~d5bp112~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jinxer_free_spells(~d5bp112~) ~1~
+END
+
+// Spiritual Clarity/Break Enchantment:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp350.spl~ BEGIN
+  ACTION_IF !(FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~) AND (FILE_EXISTS_IN_GAME ~sppr350.spl~) BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp350~ cast_spell = ~sppr350~ spell_type = ~arcane~ END
+    OUTER_SPRINT $jinxer_free_spells(~d5bp350~) ~1~
+  END
+  ACTION_IF (FILE_EXISTS_IN_GAME ~dvsrv4here.mrk~) AND (FILE_EXISTS_IN_GAME ~spwi410.spl~) BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp350~ cast_spell = ~spwi410~ spell_type = ~arcane~ END
+    OUTER_SPRINT $jinxer_free_spells(~d5bp350~) ~1~
+  END
+END
+
+// Greater Malison:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bw412.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bw412~ cast_spell = ~spwi412~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jinxer_free_spells(~d5bw412~) ~1~
+END
+
+// Pixie Dust:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp516.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp516~ cast_spell = ~sppr516~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jinxer_free_spells(~d5bp516~) ~1~
+END
+
+// Insect Plague - level 6:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp517.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp517~ cast_spell = ~sppr517~ spell_type = ~arcane~ END
+  OUTER_SPRINT $jinxer_free_spells(~d5bp517~) ~1~
+END
+
+// ELEGIST:
+
+// Spirit Ward:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp150.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp150~ cast_spell = ~sppr150~ spell_type = ~arcane~ END
+  OUTER_SPRINT $elegist_free_spells(~d5bp150~) ~1~
+END
+
+// Chant:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp203.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp203~ cast_spell = ~sppr203~ spell_type = ~arcane~ END
+  OUTER_SPRINT $elegist_free_spells(~d5bp203~) ~1~
+END
+
+// Spirit Fire:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp450.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp450~ cast_spell = ~sppr450~ spell_type = ~arcane~ END
+  OUTER_SPRINT $elegist_free_spells(~d5bp450~) ~1~
+END
+
+// Death Ward:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp409.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp409~ cast_spell = ~sppr409~ spell_type = ~arcane~ END
+  OUTER_SPRINT $elegist_free_spells(~d5bp409~) ~1~
+END
+
+// Slay Living:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp511.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp511~ cast_spell = ~sppr511~ spell_type = ~arcane~ END
+  OUTER_SPRINT $elegist_free_spells(~d5bp511~) ~1~
+END
+
+// Recall Spirit - level 6:
+ACTION_IF FILE_EXISTS_IN_GAME ~d5bp550.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = ~d5bp550~ cast_spell = ~sppr550~ spell_type = ~arcane~ END
+  OUTER_SPRINT $elegist_free_spells(~d5bp550~) ~1~
+END
+
+
+// apply free spells__________________________________________________________________
+//
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zjstr~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zskld~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zglnt~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zmstr~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zjinx~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zeleg~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zblde~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zagnt~ END
+END
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_known_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zblds~ END
+END
+
+ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zbard~ END
+END
+ACTION_PHP_EACH jester_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zjstr~ END
+END
+ACTION_PHP_EACH skald_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zskld~ END
+END
+ACTION_PHP_EACH gallant_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zglnt~ END
+END
+ACTION_PHP_EACH meister_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zmstr~ END
+END
+ACTION_PHP_EACH jinxer_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zjinx~ END
+END
+ACTION_PHP_EACH elegist_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zeleg~ END
+END
+
+ACTION_FOR_EACH kit_spl IN ~d5zbard~ ~d5zjstr~ ~d5zskld~ ~d5zglnt~ ~d5zmstr~ ~d5zjinx~ ~d5zeleg~ BEGIN
+    COPY_EXISTING ~%kit_spl%.spl~ ~override~
+//      LPF ADD_SPELL_EFFECT INT_VAR opcode = 172 target = 1 timing = 9 STR_VAR resource = ~spcl412~ END
+      LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 parameter1 = (0 - 1) timing = 9 STR_VAR resource = EVAL ~%kit_spl%~ END
+    IF_EXISTS BUT_ONLY
+END
+
+/*
+ACTION_PHP_EACH full_kits_list AS clab => kind BEGIN
+    ACTION_IF (~%kind%~ STRING_EQUAL_CASE ~w~) BEGIN
+      ACTION_IF (FILE_EXISTS_IN_GAME ~%clab%.2da~) BEGIN
+        COPY_EXISTING ~%clab%.2da~ ~override~
+          REPLACE_TEXTUALLY ~d5k~ ~d5z~
+        BUT_ONLY
+      END
+    END
+END
+*/
+
+/*
+COPY_EXISTING ~qd_mcm01.spl~ ~override~
+  LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~d5bkspl#~ END
+IF_EXISTS BUT_ONLY
+*/
+
+COPY_EXISTING ~d5bkspl.spl~ ~override~
+  LPF DELETE_EFFECT INT_VAR match_opcode = 326 END
+IF_EXISTS BUT_ONLY
+
+// COPY_EXISTING ~d5zzini.spl~ ~override~ 
+//COPY_EXISTING ~d5zltmbz.spl~ ~override~ 
+COPY_EXISTING ~d5zz020.spl~ ~override~ 
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_bard_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zbard~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_jester_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjstr~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_skald_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zskld~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_gallant_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zglnt~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_meister_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zmstr~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_jinxer_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjinx~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_hexblade_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjinx~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_elegist_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zeleg~ END
+/*
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_blade_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zblde~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_agent_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zagnt~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_bladesinger_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zblds~ END
+*/
+IF_EXISTS BUT_ONLY
+
+/* why is this even happening??
+ACTION_IF (FILE_CONTAINS_EVALUATED (~splstate.ids~ ~D5_SEMI_ARCANE~)) BEGIN
+    COPY_EXISTING ~splstate.ids~ ~override~
+	  COUNT_2DA_COLS cols
+	  READ_2DA_ENTRIES_NOW rows cols
+	  FOR (row = 1; row < rows; ++row) BEGIN
+	    READ_2DA_ENTRY_FORMER rows row 1 ~state_name~
+	    READ_2DA_ENTRY_FORMER rows row 0 ~state_ind~
+	    PATCH_IF (~%state_name%~ STRING_EQUAL_CASE ~D5_SEMI_ARCANE~) BEGIN
+          SET semi_spont_arcane = %state_ind%
+	    END
+	  END
+    BUT_ONLY
+END
+ACTION_IF !(VARIABLE_IS_SET %semi_spont_arcane%) BEGIN
+    LAF d5_resolve_state STR_VAR new_state_id = ~D5_SEMI_ARCANE~ RET new_state_ind END
+    OUTER_SET semi_spont_arcane = %new_state_ind%
+END
+
+COPY ~might_and_guile/lib/semi_spont/d5_base.spl~ ~override/d5zbd00.spl~
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_bard_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zbard~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_jester_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjstr~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_skald_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zskld~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_gallant_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zglnt~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_meister_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zmstr~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_jinxer_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjinx~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_hexblade_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjinx~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_elegist_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zeleg~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_blade_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zblde~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_agent_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zagnt~ END
+    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_bladesinger_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zblds~ END
+//	LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 1 parameter1 = %semi_spont_arcane% parameter2 = 111 timing = 0 duration = 1 STR_VAR resource = ~d5zbd00~ END
+//	LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 parameter1 = (0 - 1) timing = 9 duration = 0 STR_VAR resource = ~d5zbd00~ END
+*/
+
+/* no, let's apply this when initializing 5E casting
+ACTION_IF !(FILE_EXISTS_IN_GAME ~D5ZBD00#.eff~) BEGIN
+  CREATE EFF ~D5ZBD00#~											// 		give song
+	WRITE_LONG 0x10 146
+	WRITE_LONG 0x14 2
+	WRITE_LONG 0x20 1
+	WRITE_LONG 0x24 1
+	WRITE_LONG 0x28 0
+	WRITE_SHORT 0x2c 100
+	WRITE_ASCII 0x30 ~D5ZBD00~ #8
+END
+ACTION_PHP_EACH full_kits_list AS clab => kind BEGIN
+  ACTION_IF (~%kind%~ STRING_EQUAL_CASE ~w~) BEGIN
+    ACTION_IF (FILE_EXISTS_IN_GAME ~qd_mcm01.spl~) BEGIN
+      COPY_EXISTING ~qd_mcm01.spl~ ~override~
+        ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5ZBD00#~ END
+      BUT_ONLY
+    END
+  END
+END
+
+ACTION_PHP_EACH full_kits_list AS clab => kind BEGIN
+    ACTION_IF !(~%kind%~ STRING_EQUAL_CASE ~w~) BEGIN
+      ACTION_IF (FILE_EXISTS_IN_GAME ~%clab%.2da~) BEGIN
+        APPEND ~%clab%.2da~ ~BARD_CAST   AP_D5ZBD00  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****  ~
+      END
+    END
+END
+// ***** need to apply this ^^ to QD_MCM01
+*/
+
+LAF process_semi_spells END
+
+ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__semi_spont_sequencers.d5~) BEGIN
+    LAF semi_spont_sequencers END
+  
+    ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_metamagic.qd~) BEGIN
+      ACTION_FOR_EACH seq_spl IN ~d5_seq1~ ~d5_seq2~ ~d5_seq3~ BEGIN
+        COPY_EXISTING ~%seq_spl%.spl~ ~override~
+          LPF DELETE_EFFECT INT_VAR match_opcode = 172 STR_VAR match_resource = EVAL ~%seq_spl%~ END
+        IF_EXISTS BUT_ONLY
+      END
+      ACTION_FOR_EACH seq_seq IN ~spwi420d~ ~spwi420p~ ~spwi710d~ ~spwi710p~ ~spwi809d~ ~spwi809p~ BEGIN
+        COPY_EXISTING ~%seq_seq%.spl~ ~override~
+          LPF DELETE_EFFECT INT_VAR match_opcode = 171 STR_VAR match_resource = ~d5_seq1~ END
+          LPF DELETE_EFFECT INT_VAR match_opcode = 171 STR_VAR match_resource = ~d5_seq2~ END
+          LPF DELETE_EFFECT INT_VAR match_opcode = 171 STR_VAR match_resource = ~d5_seq3~ END
+        IF_EXISTS BUT_ONLY
+      END
+    END
+END
+
+//initialize 5E casting_______________________________________________________________
+//
+ACTION_IF !(FILE_EXISTS_IN_GAME ~D5ZZ000#.eff~) BEGIN
+  CREATE EFF ~D5ZZ000#~	
+	WRITE_LONG 0x10 146
+	WRITE_LONG 0x14 2
+	WRITE_LONG 0x20 1
+	WRITE_LONG 0x24 1
+	WRITE_LONG 0x28 0
+	WRITE_SHORT 0x2c 100
+	WRITE_ASCII 0x30 ~D5ZZ000~ #8
+END
+ACTION_IF !(FILE_EXISTS_IN_GAME ~D5Z0SLT#.eff~) BEGIN
+  CREATE EFF ~D5Z0SLT#~	
+	WRITE_LONG 0x10 146
+	WRITE_LONG 0x14 2
+	WRITE_LONG 0x20 1
+	WRITE_LONG 0x24 1
+	WRITE_LONG 0x28 0
+	WRITE_SHORT 0x2c 100
+	WRITE_ASCII 0x30 ~D5Z0SLT~ #8
+END
+ACTION_IF !(FILE_EXISTS_IN_GAME ~D5Z0SPL#.eff~) BEGIN
+  CREATE EFF ~D5Z0SPL#~	
+	WRITE_LONG 0x10 146
+	WRITE_LONG 0x14 2
+	WRITE_LONG 0x20 1
+	WRITE_LONG 0x24 1
+	WRITE_LONG 0x28 0
+	WRITE_SHORT 0x2c 100
+	WRITE_ASCII 0x30 ~D5Z0SPL~ #8
+END
+ACTION_PHP_EACH full_kits_list AS clab => kind BEGIN
+  ACTION_IF (~%kind%~ STRING_EQUAL_CASE ~W~) BEGIN
+    ACTION_IF (FILE_EXISTS_IN_GAME ~qd_mcm01.spl~) BEGIN
+      COPY_EXISTING ~qd_mcm01.spl~ ~override~
+        LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5ZZ000#~ END
+        LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5Z0SLT#~ END
+        LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5Z0SPL#~ END
+      BUT_ONLY
+    END
+  END
+  ACTION_IF (~%kind%~ STRING_EQUAL_CASE ~C~) BEGIN
+    ACTION_IF (FILE_EXISTS_IN_GAME ~qd_mcp01.spl~) BEGIN
+      COPY_EXISTING ~qd_mcp01.spl~ ~override~
+        LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5ZZ000#~ END
+        LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5Z0SLT#~ END
+        LPF ADD_SPELL_EFFECT INT_VAR insert_point = 2 opcode = 177 target = 1 parameter1 = %clab_1% parameter2 = 9 timing = 1 duration = 0 STR_VAR resource = ~D5Z0SPL#~ END
+      BUT_ONLY
+    END
+  END
+END
+
+/*
+
+ACTION_IF !(FILE_CONTAINS_EVALUATED (~clabma01.2da~ ~AP_D5ZZ000~)) BEGIN
+  ACTION_PHP_EACH full_kits_list AS clab => kind BEGIN
+    ACTION_IF !(~%kind%~ STRING_EQUAL_CASE ~w~) BEGIN
+      ACTION_IF (FILE_EXISTS_IN_GAME ~%clab%.2da~) BEGIN
+        APPEND ~%clab%.2da~ ~ SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+LESSPREP    AP_D5Z0SLT  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
+NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~
+      END
+    END
+  END
+END
+// ***** need to apply this ^^ to QD_MCM01
+
+*/
+
+//KIT DESCRIPTION PATCHES_____________________________________________________________
+//
+OUTER_SPRINT advantages @10006
+OUTER_SPRINT abilities @10007
+OUTER_SPRINT disadvantages @10008
+OUTER_SPRINT restrictions @10009
+OUTER_SPRINT tra_5E_casting @10010
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+  COUNT_2DA_ROWS 9 rows
+  FOR (row = 3; row < rows; row += 1) BEGIN
+	READ_2DA_ENTRY row 5 9 kit_clab
+	READ_2DA_ENTRY row 4 9 kit_desc
+    PHP_EACH full_kits_list AS clab => kind BEGIN
+      PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~%clab%~) BEGIN
+        PATCH_IF (~%kind%~ STRING_EQUAL_CASE ~w~) BEGIN
+	      SET desc = %kit_desc%
+		  PATCH_IF (IS_AN_INT %desc%) BEGIN
+		    GET_STRREF %desc% kit_description
+		    INNER_PATCH_SAVE kit_description ~%kit_description%~ BEGIN
+			  REPLACE_TEXTUALLY ~%advantages%~ ~%tra_5E_casting%~
+			  REPLACE_TEXTUALLY ~%abilities%~ ~%tra_5E_casting%~
+		    END
+		    INNER_ACTION BEGIN
+			  STRING_SET_EVALUATE %kit_desc% ~%kit_description%~
+		    END
+		  END
+		END
+	  END
+	END
+  END
+BUT_ONLY
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src1a.spl~) BEGIN
+  COPY_EXISTING ~d5src1a.spl~ ~override/d5brds1.spl~
+    SAY NAME1 @10991
+    SAY UNIDENTIFIED_DESC @10991
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src2a.spl~) BEGIN
+  COPY_EXISTING ~d5src2a.spl~ ~override/d5brds2.spl~
+    SAY NAME1 @10992
+    SAY UNIDENTIFIED_DESC @10992
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src3a.spl~) BEGIN
+  COPY_EXISTING ~d5src3a.spl~ ~override/d5brds3.spl~
+    SAY NAME1 @10993
+    SAY UNIDENTIFIED_DESC @10993
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src4a.spl~) BEGIN
+  COPY_EXISTING ~d5src4a.spl~ ~override/d5brds4.spl~
+    SAY NAME1 @10994
+    SAY UNIDENTIFIED_DESC @10994
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src5a.spl~) BEGIN
+  COPY_EXISTING ~d5src5a.spl~ ~override/d5brds5.spl~
+    SAY NAME1 @10995
+    SAY UNIDENTIFIED_DESC @10995
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src6a.spl~) BEGIN
+  COPY_EXISTING ~d5src6a.spl~ ~override/d5brds6.spl~
+    SAY NAME1 @10996
+    SAY UNIDENTIFIED_DESC @10996
+END
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5src7a.spl~) BEGIN
+  COPY_EXISTING ~d5src7a.spl~ ~override/d5brds7.spl~
+    SAY NAME1 @10997
+    SAY UNIDENTIFIED_DESC @10997
+END
+//____________________________________________________________________________________
+
+ACTION_PHP_EACH full_kits_list AS kit =>typ BEGIN
+  PRINT ~%kit% -- %kit_1% -- %typ%~
+END
+
+END	//	end function

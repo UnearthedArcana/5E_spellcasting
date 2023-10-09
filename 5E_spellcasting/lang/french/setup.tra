@@ -17,13 +17,20 @@
 @901 = ~Bonus à la fois aux emplacements de mémorisation et aux emplacements de lancer de sorts~
 @902 = ~Bonus seulement aux emplacements de lancer de sorts~
 @950 = ~Donner aux lanceurs de sorts 5E des emplacements de sorts bonus en fonction de leurs caractéristiques~
-
-@21989 = ~Emplacement de sort de niveau huit supplémentaire~
-@21990 = ~Emplacement de sort de niveau neuf supplémentaire~
-@21991 = ~Emplacement de sort de niveau un supplémentaire~
-@21992 = ~Emplacement de sort de niveau deux supplémentaire~
-@21993 = ~Emplacement de sort de niveau trois supplémentaire~
-@21994 = ~Emplacement de sort de niveau quatre supplémentaire~
-@21995 = ~Emplacement de sort de niveau cinq supplémentaire~
-@21996 = ~Emplacement de sort de niveau six supplémentaire~
-@21997 = ~Emplacement de sort de niveau sept supplémentaire~
+//
+@10006  = ~Advantages:~
+@10007  = ~Abilities:~
+@10008  = ~Disadvantages:~
+@10009  = ~Restrictions:~
+@10010 = ~
+- While bards memorize spells like a wizard, they can cast them spontaneously, like a sorcerer.~
+//
+@10989 = ~Emplacement de sort de niveau huit supplémentaire~
+@10990 = ~Emplacement de sort de niveau neuf supplémentaire~
+@10991 = ~Emplacement de sort de niveau un supplémentaire~
+@10992 = ~Emplacement de sort de niveau deux supplémentaire~
+@10993 = ~Emplacement de sort de niveau trois supplémentaire~
+@10994 = ~Emplacement de sort de niveau quatre supplémentaire~
+@10995 = ~Emplacement de sort de niveau cinq supplémentaire~
+@10996 = ~Emplacement de sort de niveau six supplémentaire~
+@10997 = ~Emplacement de sort de niveau sept supplémentaire~
