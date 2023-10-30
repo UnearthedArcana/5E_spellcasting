@@ -9,7 +9,7 @@
 <body>
 <h1>SubtleMods: D&D 5th Edition-style Spellcasting</h1>
 <div class="section">
-  <p><strong> Version 2.0 </strong><br />
+  <p><strong> Version 2.1 </strong><br />
   <strong> Languages:</strong> English</p>
   <p><strong>Author: <a href="http://forums.gibberlings3.net/index.php?showuser=6306">The Subtle Doctor</a></strong></p>
   <p><strong><a href="https://github.com/UnearthedArcana/5E_spellcasting">Home page</a></strong></p>

@@ -86,6 +86,7 @@ COPY ~5E_spellcasting/data/5E_casting/d5cstwiz.2da~ ~override~
   LPF arcane_casting_slots STR_VAR table_spl = ~d5zltwz~ END
 BUT_ONLY
 
+/* no don't do this anymore
 ACTION_IF (FILE_EXISTS_IN_GAME ~d5_bard.2da~) BEGIN
   COPY_EXISTING ~kit.ids~ ~override~
     COUNT_2DA_ROWS 2 rows
@@ -115,7 +116,7 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5_bard.2da~) BEGIN
     END
   BUT_ONLY
 END
-
+*/
 
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5zmslt.spl~ 
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 42 target = 1 parameter1 = 1 parameter2 = 511 /*127*/ timing = 9 END // should cover lvl 8-9 spls too
@@ -306,11 +307,13 @@ END
 
 //handle TnB revised specialists______________________________________________________
 //
-COPY_EXISTING_REGEXP GLOB ~^.+\.2da$~ ~override~
-  REPLACE_TEXTUALLY ~GA_D5SPONT~ ~****      ~
-BUT_ONLY
+ACTION_IF (MOD_IS_INSTALLED ~tomeandblood.tp2~ ~40~) BEGIN
 
-COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
+ COPY_EXISTING_REGEXP GLOB ~^.+\.2da$~ ~override~
+  REPLACE_TEXTUALLY ~GA_D5SPONT~ ~****      ~
+ BUT_ONLY
+
+ COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
   READ_SHORT 0x1c spell_type
   PATCH_IF (spell_type = 1) BEGIN
     LPF DELETE_EFFECT INT_VAR match_opcode = 177 STR_VAR match_resource = ~d5spont~ END
@@ -318,15 +321,17 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
     LPF DELETE_EFFECT INT_VAR match_opcode = 172 STR_VAR match_resource = ~d5spntx~ END
     LPF DELETE_SPELL_HEADER INT_VAR min_level = 51 END
   END
-BUT_ONLY
+ BUT_ONLY
 
-ACTION_FOR_EACH tnb_spec_spl IN ~d5_conv1~ ~d5_conv2~ ~d5_conv3~ ~d5_conj1~ ~d5_conj2~ ~d5_conj3~ ~d5_conj4~ ~d5_conj5~ ~d5_conj6~ ~d5_conj7~  ~~ BEGIN
+ ACTION_FOR_EACH tnb_spec_spl IN ~d5_conv1~ ~d5_conv2~ ~d5_conv3~ ~d5_conj1~ ~d5_conj2~ ~d5_conj3~ ~d5_conj4~ ~d5_conj5~ ~d5_conj6~ ~d5_conj7~  ~~ BEGIN
   ACTION_IF (FILE_EXISTS_IN_GAME ~%tnb_spec_spl%.spl~) BEGIN
     LAF add_semi_spells STR_VAR new_spell = EVAL ~%tnb_spec_spl%~ cast_spell = EVAL ~%tnb_spec_spl%~ spell_type = ~arcane~ END
   END
-END
+ END
 
-LAF process_semi_spells END
+ LAF process_semi_spells END
+
+END
 
 //add compatible versions of sequencers and identify__________________________________
 //
@@ -352,6 +357,235 @@ END
 COPY ~%MOD_FOLDER%/lib/semi_spont/d5_marker.d5~ ~override/d5__5E_casting_mages.d5~
 
 END	//	end function
+
+//____________________________________________________________________________________
+
+//handle MnG revised bards____________________________________________________________
+//
+DEFINE_ACTION_FUNCTION 5e_mng_bards BEGIN
+
+ APPEND ~splprot.2da~ ~D5_KIT_IS%TAB%152%TAB%-1%TAB%1~ UNLESS ~D5_KIT_IS~
+ COPY_EXISTING ~splprot.2da~ ~override~
+	COUNT_2DA_COLS cols
+	READ_2DA_ENTRIES_NOW rows cols
+	FOR (row = 1; row < rows; ++row) BEGIN
+	  READ_2DA_ENTRY_FORMER rows row 0 ~stat~
+	  PATCH_IF ~%stat%~ STRING_EQUAL_CASE ~D5_KIT_IS~ BEGIN
+	    SET kit_is_row = %row%
+	  END
+	END
+ BUT_ONLY
+
+  OUTER_SPRINT $bard_free_spells(~d5bp102~)  ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bw219~) ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bp211~) ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bw431~) ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bp321~) ~1~
+  OUTER_SPRINT $bard_free_spells(~spwi410~) ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bp512~) ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bw806~) ~1~
+  OUTER_SPRINT $bard_free_spells(~d5bp720~) ~1~
+  OUTER_SPRINT $bard_free_spells(~spwi612~) ~1~
+
+  OUTER_SPRINT $jester_free_spells(~d5bp310~) ~1~
+  OUTER_SPRINT $jester_free_spells(~d5bp311~) ~1~
+  OUTER_SPRINT $jester_free_spells(~d5bp403~) ~1~
+  OUTER_SPRINT $jester_free_spells(~d5bp508~) ~1~
+  OUTER_SPRINT $jester_free_spells(~d5bp613~) ~1~
+  OUTER_SPRINT $jester_free_spells(~d5bp615~) ~1~
+  OUTER_SPRINT $jester_free_spells(~d5bp615~) ~1~
+
+  OUTER_SPRINT $skald_free_spells(~d5bp108~) ~1~
+  OUTER_SPRINT $skald_free_spells(~d5bp206~) ~1~
+  OUTER_SPRINT $skald_free_spells(~d5bp214~) ~1~
+  OUTER_SPRINT $skald_free_spells(~d5bp406~) ~1~
+  OUTER_SPRINT $skald_free_spells(~d5bp513~) ~1~
+  OUTER_SPRINT $skald_free_spells(~d5bp509~) ~1~
+  OUTER_SPRINT $skald_free_spells(~d5bp603~) ~1~
+
+  OUTER_SPRINT $gallant_free_spells(~d5bp111~) ~1~
+  OUTER_SPRINT $gallant_free_spells(~d5bp201~) ~1~
+  OUTER_SPRINT $gallant_free_spells(~d5bp317~) ~1~
+  OUTER_SPRINT $gallant_free_spells(~d5bp408~) ~1~
+  OUTER_SPRINT $gallant_free_spells(~d5bp413~) ~1~
+  OUTER_SPRINT $gallant_free_spells(~d5bp514~) ~1~
+  OUTER_SPRINT $gallant_free_spells(~spwi113~) ~1~
+
+  OUTER_SPRINT $meister_free_spells(~d5bp105~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp207~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp202~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp318~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp427~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp324~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp410~) ~1~
+  OUTER_SPRINT $meister_free_spells(~d5bp704~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp149~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp249~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp349~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp449~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp549~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp649~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp749~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp402~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp501~) ~1~
+   OUTER_SPRINT $meister_free_spells(~d5bp602~) ~1~
+
+  OUTER_SPRINT $jinxer_free_spells(~d5bp113~) ~1~
+  OUTER_SPRINT $jinxer_free_spells(~d5bp112~) ~1~
+  OUTER_SPRINT $jinxer_free_spells(~d5bp350~) ~1~
+  OUTER_SPRINT $jinxer_free_spells(~d5bp350~) ~1~
+  OUTER_SPRINT $jinxer_free_spells(~d5bw412~) ~1~
+  OUTER_SPRINT $jinxer_free_spells(~d5bp516~) ~1~
+  OUTER_SPRINT $jinxer_free_spells(~d5bp517~) ~1~
+
+  OUTER_SPRINT $elegist_free_spells(~d5bp150~) ~1~
+  OUTER_SPRINT $elegist_free_spells(~d5bp203~) ~1~
+  OUTER_SPRINT $elegist_free_spells(~d5bp450~) ~1~
+  OUTER_SPRINT $elegist_free_spells(~d5bp409~) ~1~
+  OUTER_SPRINT $elegist_free_spells(~d5bp511~) ~1~
+  OUTER_SPRINT $elegist_free_spells(~d5bp550~) ~1~
+
+ ACTION_PHP_EACH bard_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+ ACTION_PHP_EACH jester_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+ ACTION_PHP_EACH skald_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+ ACTION_PHP_EACH gallant_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+ ACTION_PHP_EACH meister_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+ ACTION_PHP_EACH jinxer_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+ ACTION_PHP_EACH elegist_free_spells AS brdspl => num BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%brdspl%.spl~ BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%brdspl%~ cast_spell = EVAL ~%brdspl%~ spell_type = ~arcane~ END
+  END
+ END
+
+ LAF process_semi_spells END
+
+ ACTION_PHP_EACH bard_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zbard~ END
+ END
+ ACTION_PHP_EACH jester_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zjstr~ END
+ END
+ ACTION_PHP_EACH skald_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zskld~ END
+ END
+ ACTION_PHP_EACH gallant_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zglnt~ END
+ END
+ ACTION_PHP_EACH meister_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zmstr~ END
+ END
+ ACTION_PHP_EACH jinxer_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zjinx~ END
+ END
+ ACTION_PHP_EACH elegist_free_spells AS spl => ind BEGIN
+  LAF free_cast_spells STR_VAR free_spell = EVAL ~%spl%~ list_spell = ~d5zeleg~ END
+ END
+
+ COPY_EXISTING ~kitlist.2da~ ~override~
+  READ_2DA_ENTRIES_NOW rows 10
+  FOR (row = 1; row < rows; ++row) BEGIN
+    READ_2DA_ENTRY row 5 10 kit_clab
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_whsl~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_whistler_code 
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_lors~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_loresinger_code 
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_lort~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_loresinger_t_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_bard~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_bard_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_blade~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_blade_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_jstr~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_jester_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_skld~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_skald_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_glnt~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_gallant_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_mstr~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_meister_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_jinx~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_jinxer_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_hxbl~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_hexblade_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_eleg~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_elegist_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_agnt~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_agent_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_hrld~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_herald_code
+    END
+    PATCH_IF (~%kit_clab%~ STRING_EQUAL_CASE ~d5_blads~) BEGIN
+      READ_2DA_ENTRY row 9 10 nu_bladesinger_code
+    END
+  END
+ BUT_ONLY
+
+ ACTION_IF (FILE_EXISTS_IN_GAME ~d5zz020.spl~) BEGIN
+  COPY_EXISTING ~d5zz020.spl~ ~override~ 
+    PATCH_IF (VARIABLE_IS_SET %nu_bard_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_bard_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zbard~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_jester_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_jester_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjstr~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_skald_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_skald_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zskld~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_gallant_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_gallant_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zglnt~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_meister_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_meister_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zmstr~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_jinxer_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_jinxer_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjinx~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_hexblade_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_hexblade_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zjinx~ END
+    END
+    PATCH_IF (VARIABLE_IS_SET %nu_elegist_code%) BEGIN
+      LPF ADD_SPELL_EFFECT INT_VAR insert_point = 1 opcode = 326 target = 1 parameter1 = %nu_elegist_code% parameter2 = %kit_is_row% timing = 1 STR_VAR resource = ~d5zeleg~ END
+    END
+ END
+
+END	//	end MnG bards
 
 //____________________________________________________________________________________
 

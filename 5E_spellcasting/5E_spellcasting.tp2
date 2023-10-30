@@ -1,7 +1,7 @@
 BACKUP ~weidu_external/backup/5E_spellcasting~
 AUTHOR ~SubtleD~
 
-VERSION ~2.0~
+VERSION ~2.1~
 
 ALWAYS
 
@@ -60,6 +60,10 @@ END
 LAF process_semi_spells END
 
 LAF 5E_casting_wizards END
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~d5_bard.2da~) BEGIN
+  LAF 5e_mng_bards END
+END
 
 ACTION_IF (FILE_EXISTS_IN_GAME ~qdtnb_spelltweaks_clone.qd~) BEGIN
   LAF 5E_revised_simulacrum END
