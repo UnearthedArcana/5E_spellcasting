@@ -1286,7 +1286,8 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5zclons.2da~) BEGIN
   BUT_ONLY
 
   ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__spheres.d5~) BEGIN
-    COPY_EXISTING_REGEXP ~^[Ss][Pp][Pp][Rr][1-7]\([0-4][0-9]\|50\)\.spl$~ ~override~
+    COPY_EXISTING_REGEXP ~^[Ss][Pp][Pp][Rr][1-7][0-5a-zA-Z][0-9a-zA-Z]\.spl$~ ~override~
+      PATCH_IF !(FILE_CONTAINS_EVALUATED (~hidespl.2da~ ~%SOURCE_RES%~)) OR !(~%SOURCE_RES%~ STRING_MATCHES_REGEXP ~[Ss][Pp][Pp][Rr][1-7]50~) BEGIN
 		SET spl_ind = 0
         INNER_ACTION BEGIN
 		  ACTION_IF (FILE_CONTAINS_EVALUATED (~d5zclons.2da~ ~%SOURCE_RES%~)) BEGIN
@@ -1308,6 +1309,7 @@ ACTION_IF (FILE_EXISTS_IN_GAME ~d5zclons.2da~) BEGIN
 		  END
           APPEND ~d5zclons.2da~ ~%spl_ind% 	%SOURCE_RES% 	%SOURCE_RES% 	divine 	no ~ UNLESS ~%SOURCE_RES% 	%SOURCE_RES%~
         END
+      END
     BUT_ONLY
   END	//	end no FnP
 

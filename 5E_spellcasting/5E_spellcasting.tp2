@@ -1,7 +1,7 @@
 BACKUP ~weidu_external/backup/5E_spellcasting~
 AUTHOR ~SubtleD~
 
-VERSION ~2.2~
+VERSION ~2.5~
 
 ALWAYS
 
@@ -9,6 +9,8 @@ ALWAYS
 
   INCLUDE ~5E_spellcasting/comp/5E_casting.tpa~
   
+  INCLUDE ~5E_spellcasting/5E_settings.ini~
+
 END
 
 ASK_EVERY_COMPONENT
@@ -22,13 +24,6 @@ LANGUAGE
   ~French~
   ~french~
   ~5E_spellcasting/lang/french/setup.tra~
-
-
-/*
-  ***** set something up where, when NPCs leave the party, they cast a spell that removes 
-  all 206 effects in d5zz206.spl. (Just copy zz206 and remove all the op146 effects.) And 
-  sets a local variable. Then on rejoining, if that local variable is set, cast zz206.
-*/
 
 
 //set all Vancian casters to use 5E system____________________________________________
