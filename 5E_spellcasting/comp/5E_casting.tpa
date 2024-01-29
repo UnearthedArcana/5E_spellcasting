@@ -890,6 +890,10 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		          BUT_ONLY
 		        END
 		      END
+              COPY_EXISTING ~D5SF%sphere%#.EFF~ ~override~
+                WRITE_EVALUATED_ASCII 0x30 ~D5ZF%sphere%~ #8
+              IF_EXISTS BUT_ONLY
+/* eh, just change the .EFFs to do free cast instead of focus access
 			  ACTION_IF (class_num = 8) OR (class_num = 14) OR (class_num = 15) OR (class_num = 17) OR (class_num = 18) BEGIN
 			      ACTION_IF (FILE_EXISTS_IN_GAME ~QD_MCP01.SPL~) BEGIN
 				    ACTION_IF !(FILE_EXISTS_IN_GAME ~QD_MC_AP.eff~) BEGIN
@@ -920,6 +924,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 //				  COPY_EXISTING ~QD_MCP01.SPL~ ~override~
 //				    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 177 target = 1 timing = 9 resist_dispel = 0 power = 0 parameter1 = %kit_ids% parameter2 = 9 STR_VAR resource = EVAL ~d5zf%sphere%#~ END  
 			  END
+*/
 			END
 		  END
         END
@@ -1144,6 +1149,10 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 		          BUT_ONLY
 		        END
 			  END
+              COPY_EXISTING ~D5SF%sphere%#.EFF~ ~override~
+                WRITE_EVALUATED_ASCII 0x30 ~D5ZF%sphere%~ #8
+              IF_EXISTS BUT_ONLY
+/* eh, just change the .EFFs to do free cast instead of focus access
 			  ACTION_IF (class_num = 16) BEGIN
 			      ACTION_IF (FILE_EXISTS_IN_GAME ~QD_MCD01.SPL~) BEGIN
 				    ACTION_IF !(FILE_EXISTS_IN_GAME ~QD_MC_AP.eff~) BEGIN
@@ -1174,6 +1183,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
 //				  COPY_EXISTING ~QD_MCD01.SPL~ ~override~
 //				    LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 177 target = 1 timing = 9 resist_dispel = 0 power = 0 parameter1 = %kit_ids% parameter2 = 9 STR_VAR resource = EVAL ~d5zf%sphere%#~ END  
 			  END
+*/
 			END
 		  END
         END
