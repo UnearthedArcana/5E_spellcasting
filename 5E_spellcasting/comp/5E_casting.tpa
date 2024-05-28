@@ -1084,15 +1084,29 @@ END
 
 // set up casting slots op233 spell
 ACTION_IF (custom_casting_tables = 1) BEGIN
-  COPY ~5E_spellcasting/data/5E_casting/d5cstdru.2da~ ~override~
-    LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
-  BUT_ONLY
+  ACTION_IF (druids_on_cleric_table = 0) BEGIN
+    COPY ~5E_spellcasting/data/5E_casting/d5cstdru.2da~ ~override~
+      LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
+    BUT_ONLY
+  END
+  ACTION_IF (druids_on_cleric_table = 1) BEGIN
+    COPY ~5E_spellcasting/data/5E_casting/d5cstprs.2da~ ~override~
+      LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
+    BUT_ONLY
+  END
 END
 
 ACTION_IF (custom_casting_tables = 0) BEGIN
-  COPY_EXISTING ~mxspldru.2da~ ~override~
-    LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
-  BUT_ONLY
+  ACTION_IF (druids_on_cleric_table = 0) BEGIN
+    COPY_EXISTING ~mxspldru.2da~ ~override~
+      LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
+    BUT_ONLY
+  END
+  ACTION_IF (druids_on_cleric_table = 1) BEGIN
+    COPY_EXISTING ~mxsplprs.2da~ ~override~
+      LPF divine_casting_slots STR_VAR table_spl = ~d5zltdr~ END
+    BUT_ONLY
+  END
 END
 
 ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltdr.spl~) BEGIN
