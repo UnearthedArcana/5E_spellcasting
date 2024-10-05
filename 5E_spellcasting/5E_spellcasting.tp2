@@ -1,7 +1,7 @@
 BACKUP ~weidu_external/backup/5E_spellcasting~
 AUTHOR ~SubtleD~
 
-VERSION ~2.6~
+VERSION ~2.6.1~
 
 ALWAYS
 
@@ -50,6 +50,16 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__5E_casting_arcane.d5~) BEGIN
     LAF semi_spont_identify END
   END
   LAF semi_arcane_spells END
+END
+
+ACTION_PHP_EACH added_arcane_spls AS added => one BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%added%~ cast_spell = EVAL ~%added%~ spell_type = ~arcane~ END
+END 
+
+ACTION_IF (5e_divine = 1) BEGIN
+  ACTION_PHP_EACH added_divine_spls AS added => one BEGIN
+    LAF add_semi_spells STR_VAR new_spell = EVAL ~%added%~ cast_spell = EVAL ~%added%~ spell_type = ~divine~ END
+  END 
 END
 
 LAF process_semi_spells END
