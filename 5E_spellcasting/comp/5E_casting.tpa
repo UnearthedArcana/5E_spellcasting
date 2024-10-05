@@ -1240,7 +1240,7 @@ END
 
 ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltpa.spl~) BEGIN
   COPY_EXISTING ~d5zltpa.spl~ ~override~
-    WRITE_SHORT 0x1c 2
+    WRITE_SHORT 0x1c 4		// needs to be innate to bypass paladins' divine caster level deficit
 END
 
 COPY_EXISTING ~d5zprpd.spl~ ~override~
@@ -1315,7 +1315,7 @@ END
 
 ACTION_IF (FILE_EXISTS_IN_GAME ~d5zltrn.spl~) BEGIN
   COPY_EXISTING ~d5zltrn.spl~ ~override~
-    WRITE_SHORT 0x1c 2
+    WRITE_SHORT 0x1c 4		// needs to be innate to bypass rangers' divine caster level deficit
 END
 
 COPY_EXISTING ~d5zprpd.spl~ ~override~
