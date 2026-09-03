@@ -154,7 +154,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 1) /*OR (class_num = 7) OR (class_num = 10) OR (class_num = 13) OR (class_num = 14) OR (class_num = 17)*/ BEGIN	//	no need for  multiclass because in clabma01...?
-      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) AND !(~%kit_table%~ STRING_EQUAL_CASE ~D5_MANA~) BEGIN
+      PATCH_IF /*!(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) AND*/ !(~%kit_table%~ STRING_EQUAL_CASE ~D5_MANA~) BEGIN
         INNER_ACTION BEGIN
           ACTION_IF (FILE_EXISTS_IN_GAME ~%kit_table%.2da~) BEGIN
             APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
@@ -728,7 +728,7 @@ COPY_EXISTING ~kitlist.2da~ ~override~
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
     READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
     PATCH_IF (class_num = 5) BEGIN
-      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
+//      PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
         INNER_ACTION BEGIN
           ACTION_IF (FILE_EXISTS_IN_GAME ~%kit_table%.2da~) BEGIN
             APPEND ~%kit_table%.2da~ ~SPELL_INIT  AP_D5ZZ000  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** 
@@ -736,7 +736,7 @@ NO_ASPLS    AP_D5Z0SPL  ****        ****        ****        ****        ****    
 NO_CRASH    AP_D5XCRS1  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZZ000~
           END
         END
-      END
+//      END
     END
   END
 BUT_ONLY

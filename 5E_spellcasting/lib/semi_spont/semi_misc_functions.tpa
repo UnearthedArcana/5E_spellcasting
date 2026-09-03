@@ -449,7 +449,8 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__semi_armor.d5~) BEGIN
   END
  BUT_ONLY
 
- ACTION_IF (MOD_IS_INSTALLED ~tomeandblood.tp2~ ~48~) BEGIN
+/*
+ ACTION_IF (MOD_IS_INSTALLED ~might_and_guile.tp2~ ~430~) BEGIN
   COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5zbarm.spl~
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 parameter1 = (0 - 1) timing = 9 STR_VAR resource = ~d5zw172l~ END
     LPF ADD_SPELL_EFFECT INT_VAR opcode = 206 target = 1 parameter1 = (0 - 1) timing = 9 STR_VAR resource = ~d5zarm1l~ END
@@ -463,16 +464,19 @@ ACTION_IF !(FILE_EXISTS_IN_GAME ~d5__semi_armor.d5~) BEGIN
       READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 5 kit_table
       READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 8 class_num
       READ_2DA_ENTRY_FORMER ~r2en_kitlist~ row 9 kit_ids
-      PATCH_IF (class_num = 5) BEGIN
-        PATCH_IF !(~%kit_name%~ STRING_MATCHES_REGEXP ~C0SA+~ = 0) BEGIN
           INNER_ACTION BEGIN
-            APPEND ~%kit_table%.2da~ ~CAST_LEAT   AP_D5ZBARM  ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****       ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        **** ~ UNLESS ~AP_D5ZBARM~
+            COPY ~%kit_table%.2da~
+              REPLACE_TEXTUALLY ~AP_D5ARCA1~ ~AP_D5ZBARM~
+            BUT_ONLY
           END
-        END
-      END
     END
   BUT_ONLY
  END
+ 
+ // ***** needs to be done in the main .tpa for semi bards
+ // ...and therefore needs to be more selective
+ // ...also note, the MnG multibards will have this in their qdmulti .EFFs, not in the clab table
+*/
  
  ACTION_IF (FILE_EXISTS_IN_GAME ~qdmagus.2da~) BEGIN
   COPY ~%MOD_FOLDER%/lib/semi_spont/d5_base.spl~ ~override/d5mgs5e.spl~
@@ -492,7 +496,7 @@ END
 // change existing while-equipped 145 effects to 177 effects applying that .eff
 // then, make d5zprp1 block this spell, that the block will be removed upon waking
 
-h// no no no! just change 145 effects in armors to 144 effects!
+// no no no! just change 145 effects in armors to 144 effects!
 
 // but, that will screw up d5_armcast...
 
@@ -2393,7 +2397,7 @@ THEN
 	RESPONSE #100
 		SetGlobal("D5_NO_CRASH","GLOBAL",0)
 		ReallyForceSpellRES("D5XCRSH",Myself)
-		Wait(2)
+		Wait(1)
 		RestParty()
 END
 >>>>>>>> 
